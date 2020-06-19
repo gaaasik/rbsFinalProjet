@@ -1,15 +1,27 @@
 let asesTable = [
     {number: 1, name: "Собеседование раз", state: "Создано"}
 ]
+let viewIS = true;
 function addActivity() {
     var popup = webix.ui({
-    view:"popup",
-   // id:"my_popup",
-    height:250,
-    width:300,
-    body:{
-        template:"Some text"
-    }
+                        view:"popup",
+                        id:"pop1",
+                        height:450,
+                        width:1000,modal:true,
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        margin_right: "-50%",
+                        body:{
+
+                                cols:[{ view:"template"}],
+                                view:"button",value:"Закрыть", css:"closePop", click:function(){
+                                    $$("pop1").hide();
+                                    console.log("Нажали")
+                                }}
+
+
+
 }).show();
     console.log("pop")
 
@@ -23,15 +35,17 @@ webix.ready(function () {
                 view: "toolbar", id: "myToolbar",
                 cols: [
                     {view: "template", type: "header", height: 100, template: "шапка "},
-                    {view:"template",select:"view",template: "Удалить Мероприятие", css:"delActivityClass",id:"deleteActivity", width:100,
+                    {view:"template",id:"delBtn" , hidden:true , template: "Удалить Мероприятие", css:"delActivityClass", width:100,
+
                         onClick:{"delActivityClass":function () {
                                 deleteActivity();
+
                                 }}}
 
-                    ,{view:"template",select:"view", width:100,template: "Добавить мероприятие",css:"addActivityClass",id:"addActivity",
+                    ,{view:"template",select:"view", width:150,template: "Добавить мероприятие",css:"addActivityClass",id:"addActivity",
                         onClick:{"addActivityClass":function () {
                             console.log("adddddddddddd")
-                                addActivityPop();
+                                addActivity();
 
                             } }}
 
@@ -54,7 +68,11 @@ webix.ready(function () {
 
                             ] ,
                             on: { onitemclick: function(){
-                                console.log("clickrow")
+                                    console.log("clickrow")
+
+                                    let delButn = $$("delBtn");
+
+                                    delButn.show();
 
                                 }},
                         }, {view: "resizer"},
