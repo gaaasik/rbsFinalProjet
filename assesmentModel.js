@@ -6,13 +6,11 @@ function refreshTable() {
 }
 function AddMan(){
 
-    // DataAssessment.push(
-    //     {   nameMan: { view:"text", placeholder :"Имя",width: 200},
-    //         secondNameMan: { view:"text", placeholder :"Фамилия",width: 200},
-    //         resultAssessment: { view:"text", placeholder :"Результат",width: 200}
-    //
-    //     }
-   // )
+     DataAssessment.push(
+         {   nameMan: "",
+             secondNameMan: "",
+            resultAssessment: ""
+        })
     refreshTable();
 
 
@@ -47,13 +45,12 @@ function viewModel() {
                 editaction:"dblclick",
                 navigation:true,
                 select:"cell",
-
                 autoheight:true,
                 autowidth:true,
                 data:DataAssessment,
                 autoConfig:true,
                     columns:[{id:"nameMan",header:"Имя",editor:"text",},
-                        {id:"SecondName",header:"Фамилия",editor:"text",},
+                        {id:"secondNameMan",header:"Фамилия",editor:"text",},
                         {id:"resultAssessment",header:"Результат",width:300,editor:"text",},
                     ],
 
