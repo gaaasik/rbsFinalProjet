@@ -1,42 +1,18 @@
-let asesTable = [
-    {number: 1, name: "Собеседование раз", state: "Создано"}
+let assessment = [
+    {numberAssessment: 1, nameAssessment: "Собеседование раз", currentState: "Создано",dateAssessment:"",timeAssessment:""}
+]
+let DataAssessment=[
+    {nameMan:"Иван",secondNameMan:"Иванов",resultAssessment:"Ответил на 20 вопросов",numberAssessment: 1}
+    ]
+
+let Emploee =[
+    {nameEmploee:"",secondNameEmploee:"",experienceEmploee:"",positionEmploee:""}
 ]
 let viewIS = true;
 
-function addActivity() {
 
-    var popup = webix.ui({
-        view: "popup",
-        id: "pop1",
-        height: 450,
-        width: 1000,
-        modal: true,
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        margin_right: "-50%",
-        body: {
-            rows: [{
-                cols: [{view: "template", width: 100, type: "header", template: "Номер"},
-                    {view: "template", width: 150, type: "header", template: "Название"},
-                    {view: "template", width: 150, type: "header", template: "Дата"},
-                    {view: "template", width: 150, type: "header", template: "Состояние"},
-                    {view: "template", type: "header", template: "Результат собеседования      "}
-                ]
-            }
-            // ,
-            //
-            //
-            //     {cols: [{
-            //             view: "button", value: "Закрыть", css: "closePop", click: function () {
-            //                 $$("pop1").hide();
-            //                 console.log("Нажали")
-            //             }
-            //         }]
-            //     }
-        ]}}).show();
-    console.log("pop")
-
+function viewResults() {
+console.log("View Result")
 }
 
 function deleteActivity() {
@@ -75,7 +51,7 @@ webix.ready(function () {
                         onClick: {
                             "addActivityClass": function () {
                                 console.log("adddddddddddd")
-                                addActivity();
+                                viewModel();
 
                             }
                         }
@@ -90,17 +66,18 @@ webix.ready(function () {
                             view: "datatable",
                             id: "asesTable",
                             select: "row",
-                            data: asesTable,
+                            data: assessment,
                             width: 430,
 
 
-                            columns: [{id: "number", header: "№", width: 30},
-                                {id: "name", width: 200, header: "Название мероприятия"},
-                                {id: "state", width: 200, header: "Статус"},
+                            columns: [{id: "numberAssessment", header: "№", width: 30},
+                                {id: "nameAssessment", width: 200, header: "Название мероприятия"},
+                                {id: "currentState", width: 200, header: "Статус"},
 
                             ],
                             on: {
                                 onitemclick: function () {
+                                    viewResults();
                                     console.log("clickrow")
 
                                     let delButn = $$("delBtn");
