@@ -43,14 +43,18 @@ function viewModel() {
                 ]
             }, {  id:"dataCols",
                 view:"datatable",
-                editabel:true,
-                editaction:"dbclick",
+                editable:true,
+                editaction:"dblclick",
+                navigation:true,
+                select:"cell",
 
+                autoheight:true,
+                autowidth:true,
                 data:DataAssessment,
                 autoConfig:true,
-                    columns:[{id:"nameMan",header:"Имя"},
-                        {id:"SecondName",header:"Фамилия"},
-                        {id:"resultAssessment",header:"Результат",width:300},
+                    columns:[{id:"nameMan",header:"Имя",editor:"text",},
+                        {id:"SecondName",header:"Фамилия",editor:"text",},
+                        {id:"resultAssessment",header:"Результат",width:300,editor:"text",},
                     ],
 
 
