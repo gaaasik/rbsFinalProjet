@@ -7,6 +7,12 @@ class Assesment {
     get allInfo(){
         return `${this.nameAssessment} ${this.dateAssessment}`
     }
+    get name(){
+        return `${this.nameAssessment}`
+    }
+    get date(){
+        return ` ${this.dateAssessment}`
+    }
     set name(nameAssess){
         this.nameAssessment = nameAssess;
     }

@@ -1,16 +1,31 @@
-let assessment = [
-    {numberAssessment: 1, nameAssessment: "Собеседование раз", currentState: "Создано",dateAssessment:"",timeAssessment:""}
+let Assessment = [
+    //{numberAssessment: "", nameAssessment: "", currentState: "",dateAssessment:"",timeAssessment:"",nameCandidate:"",secondNameCandidate:""}
 ]
 let DataAssessment=[
     {nameMan:"Иван",secondNameMan:"Иванов",resultAssessment:"Ответил на 20 вопросов",numberAssessment: 1}
     ]
 
-let Emploee =[
-    {nameEmploee:"",secondNameEmploee:"",experienceEmploee:"",positionEmploee:""}
+
+let Employee =[
+    {nameEmployee:"Анатолий",secondNameEmployee:"Куценко",experienceEmployee:2, positionEmployee:"Руководитель отдела"},
+    {nameEmployee:"Дмитрий",secondNameEmployee:"Сычев",experienceEmployee:3, positionEmployee:"Помощник руководителя"},
+    {nameEmployee:"Екатерина",secondNameEmployee:"Трамовна",experienceEmployee:4, positionEmployee:"Уборщица"},
+    {nameEmployee:"Глеб",secondNameEmployee:"Мяленко",experienceEmployee:5, positionEmployee:"Рабочий"}
 ]
 let viewIS = true;
 
+function clickRow() {
 
+        viewResults();
+        console.log("clickrow")
+
+        let delButn = $$("delBtn");
+
+        delButn.show();
+
+
+
+}
 function viewResults() {
 console.log("View Result")
 }
@@ -66,7 +81,7 @@ webix.ready(function () {
                             view: "datatable",
                             id: "asesTable",
                             select: "row",
-                            data: assessment,
+                            data: Assessment,
                             width: 430,
 
 
@@ -76,15 +91,7 @@ webix.ready(function () {
 
                             ],
                             on: {
-                                onitemclick: function () {
-                                    viewResults();
-                                    console.log("clickrow")
-
-                                    let delButn = $$("delBtn");
-
-                                    delButn.show();
-
-                                }
+                                onitemclick: clickRow()
                             },
                         }, {view: "resizer"},
                             {
