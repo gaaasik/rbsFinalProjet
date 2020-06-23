@@ -1,4 +1,4 @@
-class Employee {
+class EmployeeClass {
     constructor(employeeAssessment) {
         this.employeeAssessment = employeeAssessment;
     }

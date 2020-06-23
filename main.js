@@ -1,5 +1,5 @@
 let Assessment = [
-    //{numberAssessment: "", nameAssessment: "", currentState: "",dateAssessment:"",timeAssessment:"",nameCandidate:"",secondNameCandidate:""}
+    {numberAssessment: "", nameAssessment: "", currentState: "",dateAssessment:"",timeAssessment:"",dataAssessment:""}
 ]
 let DataAssessment=[
     {nameMan:"Иван",secondNameMan:"Иванов",resultAssessment:"Ответил на 20 вопросов",numberAssessment: 1}
@@ -19,9 +19,9 @@ function clickRow() {
         viewResults();
         console.log("clickrow")
 
-        let delButn = $$("delBtn");
+        //let delButn = $$("delBtn");
 
-        delButn.show();
+        //delButn.show();
 
 
 
@@ -90,15 +90,16 @@ webix.ready(function () {
                                 {id: "currentState", width: 200, header: "Статус"},
 
                             ],
-                            on: {
-                                onitemclick: clickRow()
-                            },
+                            // on: {
+                            //     onitemclick: clickRow()
+                            // },
                         }, {view: "resizer"},
                             {
                                 cols: [{
                                     view: "datatable",
                                     id: "resultPath",
                                     columns: [{header: "Результат собеседования"}]
+
 
                                 }]
                             }]

@@ -30,12 +30,14 @@ function AddInMainPage() {
 
     let candidate = new Candidate(DataAssessment)
     let assessment = new Assesment($$("nameAssessment").getValue(), $$("dateAses").getValue())
-   // let employee = new Employee($$("Employee").getValue())
-    //console.log("Employee = ",employee.getEmployee())
+   let employee = new EmployeeClass($$("Employee").getValue())
+    console.log("Employee = ",employee.getEmployee())
+
     console.log(candidate)
     Assessment.push({
             nameAssessment: assessment.name,
              dateAssessment: assessment.date,
+            dataAssessment: candidate,
             currentState:"Создано",
     }
 
@@ -119,7 +121,7 @@ function viewModel() {
                             navigation: true,
                             autoheight: true,
                             autowidth: true,
-                            data: Employee,
+                            data: Employee[1],
                             autoConfig: true,
                             columns: [{id: "nameEmployee", header: "Имя"},
                                 {id: "secondNameEmployee", header: "Фамилия"},
