@@ -1,37 +1,70 @@
 let Assessment = [
-    {numberAssessment: "", nameAssessment: "", currentState: "",dateAssessment:"",timeAssessment:"",dataAssessment:""}
+    {
+        numberAssessment: "",
+        nameAssessment: "",
+        currentState: "",
+        dateAssessment: "",
+        timeAssessment: "",
+        dataAssessment: ""
+    }
 ]
-let DataAssessment=[
-    {nameMan:"Иван",secondNameMan:"Иванов",resultAssessment:"Ответил на 20 вопросов",numberAssessment: 1}
-    ]
+let DataAssessment = [
+    {nameMan: "Иван", secondNameMan: "Иванов", resultAssessment: "Ответил на 20 вопросов", numberAssessment: 1}
+]
 
 
-let Employee =[
-    {nameEmployee:"Анатолий",secondNameEmployee:"Куценко",experienceEmployee:2, positionEmployee:"Руководитель отдела"},
-    {nameEmployee:"Дмитрий",secondNameEmployee:"Сычев",experienceEmployee:3, positionEmployee:"Помощник руководителя"},
-    {nameEmployee:"Екатерина",secondNameEmployee:"Трамовна",experienceEmployee:4, positionEmployee:"Уборщица"},
-    {nameEmployee:"Глеб",secondNameEmployee:"Мяленко",experienceEmployee:5, positionEmployee:"Рабочий"}
+let Employee = [
+    {
+        nameEmployee: "Анатолий",
+        secondNameEmployee: "Куценко",
+        experienceEmployee: 2,
+        positionEmployee: "Руководитель отдела"
+    },
+    {
+        nameEmployee: "Дмитрий",
+        secondNameEmployee: "Сычев",
+        experienceEmployee: 3,
+        positionEmployee: "Помощник руководителя"
+    },
+    {nameEmployee: "Екатерина", secondNameEmployee: "Трамовна", experienceEmployee: 4, positionEmployee: "Уборщица"},
+    {nameEmployee: "Глеб", secondNameEmployee: "Мяленко", experienceEmployee: 5, positionEmployee: "Рабочий"}
 ]
 let viewIS = true;
 
-function clickRow() {
+function findInd(table, it) //поиск индекса строки на которую кликнули
+{
+    for (let i = 0; i < table.length; i++) {
+        if (table[i].id === it) {
+            return i;
+        }
+    }
 
-        viewResults();
-        console.log("clickrow")
-
-        //let delButn = $$("delBtn");
-
-        //delButn.show();
-
+    return -1;
 
 
 }
+
+function clickRow(id) {
+
+    viewResults(id);
+    console.log("clickrow")
+    let delButn = $$("delBtn");
+    delButn.show(id);
+
+
+}
+
 function viewResults() {
-console.log("View Result")
+    let resultTable = $$("resultPath").getItem();
+    console.log("View Result = ", resultTable)
+
 }
 
-function deleteActivity() {
-    console.log("dellllll")
+function deleteActivity(id, isIn, idTable, data) {
+    Assessment.splice(isIn, 1) //пытаемся удалить из таблицы и получается
+
+    refreshTable(idTable, data);
+    console.log("dellllll = ", id)
 }
 
 webix.ready(function () {
@@ -50,7 +83,9 @@ webix.ready(function () {
 
                         onClick: {
                             "delActivityClass": function () {
-                                deleteActivity();
+                                let selectedId = $$("asesTable").getItem($$("asesTable").getSelectedId()).id;
+                                let isInTable = findInd(Assessment, selectedId);
+                                deleteActivity(selectedId, isInTable, "asesTable", Assessment);
 
                             }
                         }
@@ -90,18 +125,22 @@ webix.ready(function () {
                                 {id: "currentState", width: 200, header: "Статус"},
 
                             ],
-                            // on: {
-                            //     onitemclick: clickRow()
-                            // },
+                            on: {
+                                onitemclick: function () {
+                                    let selectedId = $$("asesTable").getItem($$("asesTable").getSelectedId()).id;
+                                    clickRow(selectedId)
+                                }
+                            }
+
                         }, {view: "resizer"},
                             {
-                                cols: [{
-                                    view: "datatable",
-                                    id: "resultPath",
-                                    columns: [{header: "Результат собеседования"}]
+
+                                view: "datatable",
+                                id: "resultPath",
+
+                                columns: [{header: "Result"}],
 
 
-                                }]
                             }]
                     }]
                 }

@@ -26,12 +26,10 @@ function closeWindow() {
 
 
 function AddInMainPage() {
-    console.log("log = ", $$("nameAssessment").getValue())
-
     let candidate = new Candidate(DataAssessment)
-    let assessment = new Assesment($$("nameAssessment").getValue(), $$("dateAses").getValue())
-   let employee = new EmployeeClass($$("Employee").getValue())
-    console.log("Employee = ",employee.getEmployee())
+    let assessment = new Assesment($$("nameAssessment").getValue(),$$("dateAses").getValue())
+     //let employee = new EmployeeClass($$(Employee).getValue())
+    //console.log("Employee = ",employee.getEmployee())
 
     console.log(candidate)
     Assessment.push({
@@ -62,10 +60,6 @@ function AddInMainPage() {
 //         } ]
 //     console.log("All Info = ",allInfo)
 }
-
-
-
-
 
 
 function viewModel() {

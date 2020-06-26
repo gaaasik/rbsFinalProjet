@@ -1,26 +1,31 @@
 class Assesment {
-    constructor(nameAssessment,dateAssessment) {
-        this.nameAssessment  = nameAssessment;
+    constructor(nameAssessment, dateAssessment) {
+        this.nameAssessment = nameAssessment;
         this.dateAssessment = dateAssessment;
 
     }
-    get allInfo(){
+
+    get allInfo() {
         return `${this.nameAssessment} ${this.dateAssessment}`
     }
-    get name(){
+
+    get name() {
         return `${this.nameAssessment}`
     }
-    get date(){
+
+    get date() {
         return ` ${this.dateAssessment}`
     }
-    set name(nameAssess){
+
+    set name(nameAssess) {
         this.nameAssessment = nameAssess;
     }
-    set date(dateAssess){
+
+    set date(dateAssess) {
         this.dataAssessment = dateAssess;
     }
 
-    log(){
+    log() {
         console.log()
     }
 
