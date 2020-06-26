@@ -131,7 +131,7 @@ webix.ready(function () {
                                         timeAssessmentSelect: Assessment[isInAses].timeAssessment,
                                         dataAssessmentSelect: Assessment[isInAses].dataAssessment
                                     })
-                                    console.log("data = ",Assessment[isInAses].dataAssessment)
+                                    console.log("data = ",Assessment[isInAses].nameAssessment)
                                     refreshTable("selectAssessm",selectAssessment)
                                     clickRow(selectedId)
                                     console.log()
@@ -143,6 +143,7 @@ webix.ready(function () {
                                 //here
                                 rows: [{ id:"selectAssessm",
                                     data:selectAssessment,
+                                   // view: "datatable",
                                     cols: [{view: "text", id: "selectNameAssessment",value:"" , width: 200},
                                         {
                                             id: "dateSelectAsess",
@@ -225,9 +226,3 @@ webix.ready(function () {
         }
     )
 })
-/*{cols:[{view: "template",  width:100,type: "header", template: "Номер"},
-                  {view: "template", width:150,type: "header", template: "Название"},
-                    {view: "template", width:150,type: "header",template: "Дата"},
-                    {view: "template", width:150,type: "header",template: "Состояние"},
-                  {view: "template",type: "header",template: "Результат собеседования      "}
-                  ]}*/
