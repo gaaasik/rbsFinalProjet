@@ -1,7 +1,7 @@
 let Assessment = [
     {
         numberAssessment: "",
-        nameAssessment: "",
+        nameAssessment: "asasdasd",
         currentState: "",
         dateAssessment: "",
         timeAssessment: "",
@@ -9,8 +9,8 @@ let Assessment = [
     }
 ]
 let selectAssessment=[{}]
-let DataAssessment = [
-    {nameMan: "Иван", secondNameMan: "Иванов", resultAssessment: "Ответил на 20 вопросов", numberAssessment: 1}
+let DataAssessment = [{}
+  //  {nameMan: "Иван", secondNameMan: "Иванов", resultAssessment: "Ответил на 20 вопросов", numberAssessment: 1}
 ]
 
 
@@ -32,6 +32,8 @@ let Employee = [
 ]
 let viewIS = true;
 
+
+
 function findInd(table, it) //поиск индекса строки на которую кликнули
 {
     for (let i = 0; i < table.length; i++) {
@@ -49,16 +51,25 @@ function clickRow(id) {
     let delButn = $$("delBtn");
     delButn.show();
     let k = 1;
+    $$("smallAdd").show();
+    $$("smallAdd").define("data", Assessment[id])
+    $$("selectAssessment").define("data", Assessment)
+    $$("selectAssessment").refresh()
+
 
 }
 
 function viewResults() {
 }
+function deleteFromWindow() {
 
+}
 function deleteActivity(id, isIn, idTable, data) {
-    Assessment.splice(isIn, 1) //пытаемся удалить из таблицы и получается
+    Assessment.splice(isIn, 1) 
     refreshTable(idTable, data);
     console.log("dellllll = ", id)
+
+   // $$("smallAdd").close();
 }
 
 webix.ready(function () {
@@ -66,7 +77,12 @@ webix.ready(function () {
             rows: [{
                 view: "toolbar", id: "myToolbar",
                 cols: [
-                    {view: "template", type: "header", height: 100, template: "шапка "},
+                    {view: "template",
+                        type: "header",
+                        height: 100,
+                        template: "Assessment Manager",
+                       },
+
                     {
                         view: "template",
                         id: "delBtn",
@@ -74,13 +90,18 @@ webix.ready(function () {
                         template: "Удалить Мероприятие",
                         css: "delActivityClass",
                         width: 100,
-
                         onClick: {
-                            "delActivityClass": function () {
+                            "delActivityClass": function ()     {
+                                if (confirm("Вы уверены что хотите удалить это мероприятие?")){
+                                    $$("delBtn").define("hidden", true)
+                                    $$("smallAdd").define("hidden", true)
+                                if (($$("asesTable").getItem($$("asesTable").getSelectedId()))!==undefined)
+                                {
                                 let selectedId = $$("asesTable").getItem($$("asesTable").getSelectedId()).id;
                                 let isInTable = findInd(Assessment, selectedId);
-                                deleteActivity(selectedId, isInTable, "asesTable", Assessment);
-                            }
+                                deleteActivity(selectedId, isInTable, "asesTable", Assessment);}
+                                else {alert("Удалять нечего.")}
+                            } }
                         }
                     }
 
@@ -93,8 +114,20 @@ webix.ready(function () {
                         id: "addActivity",
                         onClick: {
                             "addActivityClass": function () {
-                                console.log("adddddddddddd")
                                 viewModel();
+
+                            }
+                        }
+                    }, {
+                        view: "template",
+                        select: "view",
+                        width: 150,
+                        template: "Редактировать сотрудников",
+                        css: "addEmployeeClass",
+                        id: "addEmployeeInMain",
+                        onClick: {
+                            "addEmployeeClass": function () {
+                                editEmployeeInMain();
 
                             }
                         }
@@ -102,7 +135,7 @@ webix.ready(function () {
 
                 ]
 
-            },
+              },
                 {
                     rows: [{
                         cols: [{
@@ -132,24 +165,30 @@ webix.ready(function () {
                                         dataAssessmentSelect: Assessment[isInAses].dataAssessment
                                     })
                                     console.log("data = ",Assessment[isInAses].nameAssessment)
-                                    refreshTable("selectAssessm",selectAssessment)
-                                    clickRow(selectedId)
+                                   // refreshTable("selectAssessm",selectAssessment)
+                                    clickRow(isInAses)
                                     console.log()
                                 }
                             }
 
-                        }, {view: "resizer"},
-                            {
-                                //here
+                        }
+                        , {view: "resizer"},
+
+                            {   //////////
+                                hidden: true,
+                                id:"smallAdd",
+                                data:Assessment,
                                 rows: [{ id:"selectAssessm",
-                                    data:selectAssessment,
-                                   // view: "datatable",
-                                    cols: [{view: "text", id: "selectNameAssessment",value:"" , width: 200},
+                                    data:Assessment,
+                                    view: "datatable",
+                                    cols: [
+                                        {view: "text", id: "selectNameAssessment",value:Assessment.nameAssessment , width: 200},
+
                                         {
                                             id: "dateSelectAsess",
                                             view: "datepicker",
-                                           // value: $$("dateAssessmentSelect").getValue(selectAssessment),
-                                            label: "Date",
+                                           label: "Date",
+                                            //value: Assessment.dateAssessment,
                                             timepicker: true,
                                             width: 300,
                                             left: 10,
@@ -180,11 +219,11 @@ webix.ready(function () {
                                                 select: "cell",
                                                 autoheight: true,
                                                 autowidth: true,
-                                                data: DataAssessment,
+                                                data: Assessment,
                                                 autoConfig: true,
-                                                columns: [{id: "snameMan", header: "Имя", editor: "text",},
-                                                    {id: "ssecondNameMan", header: "Фамилия", editor: "text",},
-                                                    {id: "sresultAssessment", header: "Результат", width: 200, editor: "text",},
+                                                columns: [{id: "nameAssessment", header: "Имя", editor: "text",},
+                                                    {id: "secondNameAssessment", header: "Фамилия", editor: "text",},
+                                                    {id: "resultAssessment", header: "Результат", width: 200, editor: "text",},
                                                 ],
 
 
@@ -196,7 +235,7 @@ webix.ready(function () {
                                                 navigation: true,
                                                 autoheight: true,
                                                 autowidth: true,
-                                                data: choseEmployee,
+                                                data: Assessment.dataAssessment,
                                                 autoConfig: true,
                                                 columns: [{id: "snameEmployee", header: "Имя"},
                                                     {id: "ssecondNameEmployee", header: "Фамилия"},
@@ -210,13 +249,11 @@ webix.ready(function () {
                                         ]
                                     },
                                     {
-                                        cols: [{view: "button", value: "Добавить человека", click: "AddMan()", width: 200},
+                                        cols: [{view: "button", value: "Добавить человека", click: "", width: 200},
                                             {
-                                                view: "button", value: "Добавить сотрудника", click: "AddEmployee()", width: 200
+                                                view: "button", value: "Добавить сотрудника", click: "", width: 200
                                             }]
                                     },
-                                    {view: "button", value: "Добавить мероприятие", click: "AddInMainPage()", width: 200, height: 100},
-                                    {view: "button", value: "Закрыть окно", click: "closeWindow()", width: 400}
                                 ]
                             }]
                     }]

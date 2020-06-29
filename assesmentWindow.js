@@ -13,7 +13,7 @@ function refreshTable(IdTable, table) {
 }
 
 function AddMan() {
-
+    console.log("dataassaement = " ,DataAssessment)
     DataAssessment.push(
         {
             nameMan: "Имя",
@@ -25,41 +25,45 @@ function AddMan() {
 
 }
 
-function AddEmploe() {
-
-}
-
 function AddEmployee() {
     console.log("AddEnployee")
     var addEmpl = webix.ready(function () {
         webix.ui({
             id: "addEmpl",
             view: "window",
-            modal: true,
+            modeless: true,
             left: 200,
             top: 50,
             body: {
-                //работники
-                id: "choseEmployeeTable",
-                view: "datatable",
-                select: "row",
-                navigation: true,
-                autoheight: true,
-                autowidth: true,
-                data: Employee,
-                autoConfig: true,
-                columns: [{id: "nameEmployee", header: "Имя"},
-                    {id: "secondNameEmployee", header: "Фамилия"},
-                    {id: "experienceEmployee", header: "Опыт работы(лет)"},
-                    {id: "positionEmployee", header: "Должность", width: 300}
+                rows: [{
+                    view: "button", value: "Close Window",
+                    on: {
+                        onItemClick: function () {
+                            $$("addEmpl").close()
+                        }
+                    }
+                },
+                    {
+                        id: "choseEmployeeTable",
+                        view: "datatable",
+                        select: "row",
+                        navigation: true,
+                        autoheight: true,
+                        autowidth: true,
+                        data: Employee,
+                        autoConfig: true,
 
-                ],
+                        columns: [{id: "nameEmployee", header: "Имя"},
+                            {id: "secondNameEmployee", header: "Фамилия"},
+                            {id: "experienceEmployee", header: "Опыт работы(лет)"},
+                            {id: "positionEmployee", header: "Должность", width: 300}
 
-                on: {
-                    onItemClick: function () {
-                        let employeeId = $$("choseEmployeeTable").getItem($$("choseEmployeeTable").getSelectedId()).id
-                        let isInEmploye = findInd(Employee, employeeId)
-                        let isInChoseEmploye = findInd(choseEmployee, employeeId)
+                        ],
+
+                        on: {
+                            onItemClick: function () {
+                                let employeeId = $$("choseEmployeeTable").getItem($$("choseEmployeeTable").getSelectedId()).id
+                                let isInEmploye = findInd(Employee, employeeId)
 
                                 choseEmployee.push({
                                     nameEmployee: Employee[isInEmploye].nameEmployee,
@@ -68,20 +72,23 @@ function AddEmployee() {
                                     positionEmployee: Employee[isInEmploye].positionEmployee
 
                                 })
+
                                 refreshTable("employeeTable", choseEmployee)
+                                let isInChoseEmploye = findInd(choseEmployee, employeeId)
+                                console.log("isInEmpl = ", isInEmploye, "isInChose  = ", isInChoseEmploye)
+
                                 $$("addEmpl").close()
+
+                            }
+
 
                         }
 
 
+                    }]
+                //работники
 
-
-                    }
-
-                }
-
-
-
+            }
         }).show()
 
     })
@@ -89,6 +96,8 @@ function AddEmployee() {
 }
 
 function closeWindow() {
+    DataAssessment = [{}]
+    choseEmployee = [{}]
     $$("pop1").close();
 }
 
@@ -96,7 +105,7 @@ function closeWindow() {
 function AddInMainPage() {
     let candidate = new Candidate(DataAssessment)
     let assessment = new Assesment($$("nameAssessment").getValue(), $$("dateAses").getValue())
-    //let employee = new EmployeeClass($$(Employee).getValue())
+    let employee = new EmployeeClass(choseEmployee)
     //console.log("Employee = ",employee.getEmployee())
 
     console.log(candidate)
@@ -105,27 +114,12 @@ function AddInMainPage() {
             dateAssessment: assessment.date,
             dataAssessment: candidate,
             currentState: "Создано",
+            employeeAssessment: employee,
         }
     )
+
     closeWindow()
     refreshTable("asesTable", Assessment)
-
-//     console.log(DataAssessment)
-//     console.log($$("nameAssessment").getValue())
-//     console.log(($$("dateAses").getValue()))
-//     let infoMan =[ {nameMan:"",secondName:"",result:""}]
-//         for (let i = 0;i<DataAssessment.length;i++){
-//         infoMan[i].nameMan = DataAssessment[i].nameMan;
-//         infoMan[i].secondName=DataAssessment[i].secondNameMan;
-//         infoMan[i].result =DataAssessment[i].resultAssessment;
-//         console.log(infoMan[i].nameMan)
-//     }
-//
-//     let allInfo = [{nameAssess:$$("nameAssessment").getValue(),
-//         dateAssess: $$("dateAses").getValue(),
-//         info:infoMan
-//         } ]
-//     console.log("All Info = ",allInfo)
 }
 
 
@@ -166,53 +160,99 @@ function viewModel() {
                     {
                         cols: [
                             { //кандидаты
-                                id: "dataCols",
-                                view: "datatable",
-                                editable: true,
-                                select: "row",
-                                editaction: "dblclick",
-                                navigation: true,
-                                select: "cell",
-                                autoheight: true,
-                                autowidth: true,
-                                data: DataAssessment,
-                                autoConfig: true,
-                                columns: [{id: "nameMan", header: "Имя", editor: "text",},
-                                    {id: "secondNameMan", header: "Фамилия", editor: "text",},
-                                    {id: "resultAssessment", header: "Результат", width: 300, editor: "text",},
-                                ],
+                                rows: [{
+                                    id: "dataCols",
+                                    view: "datatable",
+                                    editable: true,
+                                    //select: "row",
+                                    editaction: "dblclick",
+                                    navigation: true,
+                                    select: "cell",
+                                    autoheight: true,
+                                    autowidth: true,
+                                    data: DataAssessment,
+                                    // onDbClick:{select:"row"},
+                                    autoConfig: true,
+                                    on: {
+                                        onItemClick: function () {
+                                            // let candidateId = $$("dataCols").getItem($$("dataCols").getSelectedId()).id
+                                            // let isInCandidate = findInd(candidateId, DataAssessment)
+                                            $$("delCand").define("hidden", false)
+                                            let candidateId = $$("dataCols").getItem($$("dataCols").getSelectedId()).id
+                                            let isInCandidate = findInd(candidateId,DataAssessment)
+                                            console.log("is in candidate",isInCandidate)
+                                        }
+                                    },
+                                    columns: [{id: "nameMan", header: "Имя", editor: "text",},
+                                        {id: "secondNameMan", header: "Фамилия", editor: "text",},
+                                        {id: "resultAssessment", header: "Результат", width: 300, editor: "text",},
+                                    ],
 
 
+                                }, {
+                                    cols: [{
+                                        view: "button",
+
+                                        value: "Добавить человека",
+                                        click: "AddMan()",
+                                        width: 200
+                                    },
+                                        {
+                                            view: "button",
+                                            id: "delCand",
+
+                                            value: "Убрать человека",
+                                            on: {
+                                                onItemClick: function () {
+                                                    deleteCandidateFromWindow()
+
+                                                }
+                                            },
+                                            width: 200
+                                        }
+
+                                    ]
+                                }
+                                ]
                             }, {view: "resizer"},
                             { //работники
-                                id: "employeeTable",
-                                view: "datatable",
-                                select: "row",
-                                navigation: true,
-                                autoheight: true,
-                                autowidth: true,
-                                data: choseEmployee,
-                                autoConfig: true,
-                                columns: [{id: "nameEmployee", header: "Имя"},
-                                    {id: "secondNameEmployee", header: "Фамилия"},
-                                    {id: "experienceEmployee", header: "Опыт работы(лет)"},
-                                    {id: "positionEmployee", header: "Должность", width: 300}
+                                rows: [{
+                                    id: "employeeTable",
+                                    view: "datatable",
+                                    select: "row",
+                                    navigation: true,
+                                    autoheight: true,
+                                    autowidth: true,
+                                    data: choseEmployee,
+                                    autoConfig: true,
+                                    columns: [{id: "nameEmployee", header: "Имя"},
+                                        {id: "secondNameEmployee", header: "Фамилия"},
+                                        {id: "experienceEmployee", header: "Опыт работы(лет)"},
+                                        {id: "positionEmployee", header: "Должность", width: 300}
 
-                                ],
+                                    ],
 
+                                }, {
+                                    cols: [{view: "button", value: "убрать сотрудника"}, {
+                                        view: "button", value: "Добавить сотрудника", click: "AddEmployee()", width: 200
+                                    }]
+                                }]
 
                             }
                         ]
                     },
+
                     {
-                        cols: [{view: "button", value: "Добавить человека", click: "AddMan()", width: 200},
-                            {
-                                view: "button", value: "Добавить сотрудника", click: "AddEmployee()", width: 200
-                            }]
-                    },
-                    {view: "button", value: "Добавить мероприятие", click: "AddInMainPage()", width: 200, height: 100},
-                    {view: "button", value: "Закрыть окно", click: "closeWindow()", width: 400}
-                ],
+                        cols: [{
+                            view: "button",
+                            value: "Добавить мероприятие",
+                            click: "AddInMainPage()",
+                            width: 200,
+                            height: 100
+                        },
+                            {view: "button", value: "Закрыть окно", click: "closeWindow()", width: 200}
+                        ]
+                    }],
             }
         }).show();
     })
