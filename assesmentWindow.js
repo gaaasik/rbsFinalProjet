@@ -13,20 +13,37 @@ function refreshTable(IdTable, table) {
 }
 
 function AddMan() {
-    console.log("dataassaement = " ,DataAssessment)
-    DataAssessment.push(
-        {
-            nameMan: "Имя",
-            secondNameMan: "фамилия",
-            resultAssessment: "Результат"
-        })
-    refreshTable("dataCols", DataAssessment);
+    let validate = true
+    for (let i = 0; i < DataAssessment.length; i++) {
+        if (DataAssessment[i].nameMan === "" || DataAssessment[i].secondNameMan === "" || DataAssessment[i].resultAssessment === "") {
+            alert("Заполните все поля!")
+            validate = false
+        } else {
+            validate = true;
+        }
+    }
+    if (validate) {
+        DataAssessment.push(
+            {
+                nameMan: "",
+                secondNameMan: "",
+                resultAssessment: ""
+            })
+        refreshTable("dataCols", DataAssessment);
+    }
 
 
 }
 
+function delRowFromTable(table, textIdTable) {
+    let Id = $$(textIdTable).getItem($$(textIdTable).getSelectedId()).id
+    let isInTable = findInd(table, Id)
+    table.splice(isInTable, 1)
+    refreshTable(textIdTable, table)
+
+}
+
 function AddEmployee() {
-    console.log("AddEnployee")
     var addEmpl = webix.ready(function () {
         webix.ui({
             id: "addEmpl",
@@ -63,23 +80,26 @@ function AddEmployee() {
                         on: {
                             onItemClick: function () {
                                 let employeeId = $$("choseEmployeeTable").getItem($$("choseEmployeeTable").getSelectedId()).id
-                                let isInEmploye = findInd(Employee, employeeId)
-
+                                let isInEmployee = findI(Employee,employeeId)
+                                let isInChoseEmploeyy = findI(choseEmployee,employeeId)
+                                if (isInChoseEmploeyy>-1){
+                                    alert("Этот сотрудник уже в списке")
+                                }
+                                else{
+                                    console.log("is in chose = ", isInChoseEmploeyy)
                                 choseEmployee.push({
-                                    nameEmployee: Employee[isInEmploye].nameEmployee,
-                                    secondNameEmployee: Employee[isInEmploye].secondNameEmployee,
-                                    experienceEmployee: Employee[isInEmploye].experienceEmployee,
-                                    positionEmployee: Employee[isInEmploye].positionEmployee
+                                    nameEmployee: Employee[isInEmployee].nameEmployee,
+                                    secondNameEmployee: Employee[isInEmployee].secondNameEmployee,
+                                    experienceEmployee: Employee[isInEmployee].experienceEmployee,
+                                    positionEmployee: Employee[isInEmployee].positionEmployee
 
                                 })
 
                                 refreshTable("employeeTable", choseEmployee)
-                                let isInChoseEmploye = findInd(choseEmployee, employeeId)
-                                console.log("isInEmpl = ", isInEmploye, "isInChose  = ", isInChoseEmploye)
 
                                 $$("addEmpl").close()
 
-                            }
+                            }}
 
 
                         }
@@ -101,32 +121,45 @@ function closeWindow() {
     $$("pop1").close();
 }
 
-
 function AddInMainPage() {
+    let validate = true;
     let candidate = new Candidate(DataAssessment)
     let assessment = new Assesment($$("nameAssessment").getValue(), $$("dateAses").getValue())
     let employee = new EmployeeClass(choseEmployee)
-    //console.log("Employee = ",employee.getEmployee())
+    for (let i = 0; i < DataAssessment.length; i++) {
+        if (DataAssessment[i].nameMan === "" || DataAssessment[i].secondNameMan === "" || DataAssessment[i].resultAssessment === "") {
+            alert("Заполните все поля кандидатов!");
+            validate = false
+        } else {
+            validate = true;
+            if (assessment.name === "") {
+                alert("Введите название мероприятия!");
+                validate = false
+            } else {
+                validate = true
+            }
 
-    console.log(candidate)
-    Assessment.push({
-            nameAssessment: assessment.name,
-            dateAssessment: assessment.date,
-            dataAssessment: candidate,
-            currentState: "Создано",
-            employeeAssessment: employee,
         }
-    )
-
-    closeWindow()
-    refreshTable("asesTable", Assessment)
+    }
+    if (validate) {
+        Assessment.push({
+                nameAssessment: assessment.name,
+                dateAssessment: assessment.date,
+                dataAssessment: candidate,
+                currentState: "Создано",
+                employeeAssessment: employee,
+            }
+        )
+        closeWindow()
+        refreshTable("asesTable", Assessment)
+    }
 }
-
 
 function viewModel() {
     var popup = webix.ready(function () {
         webix.ui({
             view: "window",
+            close: true,
             modal: true,
             id: "pop1",
             fullscreen: true,
@@ -179,8 +212,8 @@ function viewModel() {
                                             // let isInCandidate = findInd(candidateId, DataAssessment)
                                             $$("delCand").define("hidden", false)
                                             let candidateId = $$("dataCols").getItem($$("dataCols").getSelectedId()).id
-                                            let isInCandidate = findInd(candidateId,DataAssessment)
-                                            console.log("is in candidate",isInCandidate)
+                                            let isInCandidate = findInd(candidateId, DataAssessment)
+
                                         }
                                     },
                                     columns: [{id: "nameMan", header: "Имя", editor: "text",},
@@ -204,7 +237,8 @@ function viewModel() {
                                             value: "Убрать человека",
                                             on: {
                                                 onItemClick: function () {
-                                                    deleteCandidateFromWindow()
+                                                    //  let candidateId = $$("dataCols").getItem($$("dataCols").getSelectedId()).id
+                                                    delRowFromTable(DataAssessment, "dataCols")
 
                                                 }
                                             },
@@ -233,7 +267,15 @@ function viewModel() {
                                     ],
 
                                 }, {
-                                    cols: [{view: "button", value: "убрать сотрудника"}, {
+                                    cols: [{
+                                        view: "button", value: "убрать сотрудника", on: {
+                                            onItemClick: function () {
+
+                                                delRowFromTable(choseEmployee, "employeeTable")
+
+                                            }
+                                        },
+                                    }, {
                                         view: "button", value: "Добавить сотрудника", click: "AddEmployee()", width: 200
                                     }]
                                 }]

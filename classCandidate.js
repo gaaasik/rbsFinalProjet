@@ -18,6 +18,3 @@ class Candidate {
 
 }
 
-// let candidate = new Candidate(DataAssessment)
-// candidate.data(DataAssessment);
-// console.log("candidate = ",dataAssess);
