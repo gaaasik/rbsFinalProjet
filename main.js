@@ -1,16 +1,7 @@
-let Assessment = [
-    {
-        numberAssessment: "",
-        nameAssessment: "asasdasd",
-        currentState: "",
-        dateAssessment: "",
-        timeAssessment: "",
-        dataAssessment: ""
-    }
-]
+let Assessment = []
 let selectAssessment = [{}]
 let DataAssessment = [
-      {nameMan: "", secondNameMan: "", resultAssessment: "", numberAssessment: 1}
+    {nameMan: "Первый", secondNameMan: "Человек", patronymic: "На земле", }
 ]
 let Employee = [
     {
@@ -29,28 +20,30 @@ let Employee = [
     {nameEmployee: "Глеб", secondNameEmployee: "Мяленко", experienceEmployee: 5, positionEmployee: "Рабочий"}
 ]
 let viewIS = true;
+
 function findI(table, it) //поиск индекса строки на которую кликнули
-{  let is;
+{
+    let is;
     let iter
-    for (let i = 0; i < table.length; i++)
-    {
+    for (let i = 0; i < table.length; i++) {
         if (table[i].id === it) {
             is = true;
             iter = i
         }
     }
-    if (is){
-        console.log("iter = ",iter)
-         return iter
+    if (is) {
+        console.log("iter = ", iter)
+        return iter
+    } else {
+        return -1;
     }
-    else {return -1;}
 
 
 }
+
 function findInd(table, it) //поиск индекса строки на которую кликнули
 {
-    for (let i = 0; i < table.length; i++)
-    {
+    for (let i = 0; i < table.length; i++) {
         if (table[i].id === it) {
 
             return i;
@@ -61,10 +54,9 @@ function findInd(table, it) //поиск индекса строки на кот
     return -1;
 
 
-
 }
 
-function findIndex(table, it, length) //поиск индекса строки на которую кликнули
+function findIndex(table, it,) //поиск индекса строки на которую кликнули
 {
     for (let i = 1; i < length; i++) {
         if (table[i].id === it) {
@@ -97,7 +89,34 @@ function deleteActivity(id, isIn, idTable, data) {
     // $$("smallAdd").close();
 }
 
-webix.ready(function () {
+function refreshEditor(assesLength,data,employees) {
+
+    //название
+    $$("nameAssessmentSelect").define("value", selectAssessment[0].nameAssessmentSelect)
+    $$("nameAssessmentSelect").refresh();
+    //дата
+
+       let date = selectAssessment[0].dateAssessmentSelect
+    console.log("data = ",date)
+    webix.message(webix.Date.dateToStr("%Y-%m-%d")(date));
+    $$("dateSelectAsess").define("value", date);
+     $$("dateSelectAsess").refresh();
+
+
+    console.log("data = ",data)
+    $$("dataAssessmentSelect").clearAll()
+    $$("dataAssessmentSelect").define("data",data);
+    $$("dataAssessmentSelect").refresh();
+
+    console.log("data = ",employees)
+    $$("semployeeTable").clearAll()
+    $$("semployeeTable").define("data",employees);
+    $$("semployeeTable").refresh();
+    // $$("").define("value",);
+    // $$("").refresh();
+}
+
+webix.ready(function (message) {
     webix.ui({
             rows: [{
                 view: "toolbar", id: "myToolbar",
@@ -113,12 +132,13 @@ webix.ready(function () {
                         view: "template",
                         id: "delBtn",
                         hidden: true,
+                        class: "btn",
                         template: "Удалить Мероприятие",
                         css: "delActivityClass",
                         width: 100,
                         onClick: {
                             "delActivityClass": function () {
-                                if (confirm("Вы уверены что хотите удалить это мероприятие?")) {
+                                if (confirm("Вы уверены что хотите удалить это мероприятие?", selectAssessment[0].nameAssessmentSelect)) {
                                     $$("delBtn").define("hidden", true)
                                     $$("smallAdd").define("hidden", true)
                                     if (($$("asesTable").getItem($$("asesTable").getSelectedId())) !== undefined) {
@@ -136,6 +156,7 @@ webix.ready(function () {
                     , {
                         view: "template",
                         select: "view",
+                        class: "btn",
                         width: 150,
                         template: "Добавить мероприятие",
                         css: "addActivityClass",
@@ -146,9 +167,11 @@ webix.ready(function () {
 
                             }
                         }
-                    }, {
+                    },
+                    {
                         view: "template",
                         select: "view",
+                        class: "btn",
                         width: 150,
                         template: "Редактировать сотрудников",
                         css: "addEmployeeClass",
@@ -165,13 +188,15 @@ webix.ready(function () {
 
             },
                 {
-                    rows: [{
+                    rows: [
+                        {
                         cols: [{
                             view: "datatable",
                             id: "asesTable",
                             select: "row",
                             data: Assessment,
                             width: 430,
+                            height: 500,
 
 
                             columns: [{id: "numberAssessment", header: "№", width: 30},
@@ -186,19 +211,21 @@ webix.ready(function () {
                                     let isInAses = findInd(Assessment, selectedId)
                                     selectAssessment = [];
                                     selectAssessment.push({
-                                        numberAssessmentSelect: "",
                                         nameAssessmentSelect: Assessment[isInAses].nameAssessment,
-                                        currentStateSelect: Assessment[isInAses].currentState,
                                         dateAssessmentSelect: Assessment[isInAses].dateAssessment,
-                                        timeAssessmentSelect: Assessment[isInAses].timeAssessment,
-                                        dataAssessmentSelect: Assessment[isInAses].dataAssessment
+                                        dataAssessmentSelect:Assessment[isInAses].dataAssessment,
+
                                     })
-                                    //refreshTable("selectAssessment",selectAssessment[0].dataAssessmentSelect)
-                                    let candidate = new Candidate(selectAssessment[0].dataAssessmentSelect)
-                                    refreshTable("selectAssessment", candidate)
+                                    let data=Assessment[isInAses].dataAssessment
+                                    console.log("data",data.dataAssessment[0].nameMan)
+                                    console.log("Assessment[]., = " ,Assessment,)
+
+
+                                    refreshEditor(isInAses,data.dataAssessment,Assessment[isInAses].employeeAssessment.employeeAssessment)
                                     clickRow(isInAses)
 
-                                    }
+
+                                }
                             }
 
                         }
@@ -206,25 +233,34 @@ webix.ready(function () {
                             {
                                 data: selectAssessment,
                                 id: "smallAdd",
-                                rows: [{
+                                height: 500,
+                                rows: [{ //
                                     cols: [
                                         {
                                             view: "text",
-                                            id: "selectNameAssessment",
-                                            value: selectAssessment[0].nameAssessmentSelect,
+                                            id: "nameAssessmentSelect",
                                             width: 200
                                         },
 
                                         {
                                             id: "dateSelectAsess",
                                             view: "datepicker",
-                                            label: "Date",
-                                            value: selectAssessment[0].dateAssessmentSelect,
+                                            label: "Дата",
+                                            //value:1,
                                             timepicker: true,
                                             width: 300,
                                             left: 10,
-                                        },
+
+                                        },{cols:[{
+                                                view: "template",
+                                                template:"Статус:",
+                                                id: "current", width: 200,
+
+
+                                            },{view: "template", //////////тут должен быть статус
+                                                 }]}
                                     ]
+    //|||
                                 }
                                     , {
                                         rows: [{
@@ -240,29 +276,23 @@ webix.ready(function () {
                                     {
                                         cols: [
                                             { //кандидаты
-                                                id: "selectAssessment",
+                                                id: "dataAssessmentSelect",
                                                 view: "datatable",
                                                 editable: true,
-                                                select: "row",
                                                 editaction: "dblclick",
                                                 navigation: true,
                                                 select: "cell",
                                                 autoheight: true,
                                                 autowidth: true,
-                                                //data: Assessment,
-                                                data: selectAssessment[0].dataAssessmentSelect,
+                                                //
+                                                data: DataAssessment,
 
                                                 autoConfig: true,
-                                                columns: [{id: "nameMan", header: "Имя", editor: "text",},
+                                                columns: [{id: "nameMan", header: "Имя", value:"Начало",editor: "text", },
                                                     {id: "secondNameMan", header: "Фамилия", editor: "text",},
-                                                    {
-                                                        id: "resultAssessment",
-                                                        header: "Результат",
-                                                        width: 200,
-                                                        editor: "text",
-                                                    },
-                                                ],
-
+                                                    {id: "patronymic", header: "Отчество",editor: "text", },
+                                                    {id: "birthday",header: "Дата Рождения",editor: "text",}
+                                                        ],
 
                                             }, {view: "resizer"},
                                             { //работники
@@ -272,12 +302,12 @@ webix.ready(function () {
                                                 navigation: true,
                                                 autoheight: true,
                                                 autowidth: true,
-                                                data: Assessment.dataAssessment,
+                                                data: Assessment,
                                                 autoConfig: true,
-                                                columns: [{id: "snameEmployee", header: "Имя"},
-                                                    {id: "ssecondNameEmployee", header: "Фамилия"},
-                                                    {id: "sexperienceEmployee", header: "Опыт работы(лет)", width: 40},
-                                                    {id: "spositionEmployee", header: "Должность", width: 200}
+                                                columns: [{id: "nameEmployee", header: "Имя"},
+                                                    {id: "secondNameEmployee", header: "Фамилия"},
+                                                    {id: "experienceEmployee", header: "Опыт работы(лет)", width: 40},
+                                                    {id: "positionEmployee", header: "Должность", width: 200}
 
                                                 ],
 
@@ -286,9 +316,19 @@ webix.ready(function () {
                                         ]
                                     },
                                     {
-                                        cols: [{view: "button", value: "Добавить человека", click: "", width: 200},
+                                        cols: [{
+                                            view: "button",
+                                            class: "btn",
+                                            value: "Добавить человека",
+                                            click: "",
+                                            width: 200
+                                        },
                                             {
-                                                view: "button", value: "Добавить сотрудника", click: "", width: 200
+                                                view: "button",
+                                                class: "btn",
+                                                value: "Добавить сотрудника",
+                                                click: "",
+                                                width: 200
                                             }]
                                     },
                                 ]

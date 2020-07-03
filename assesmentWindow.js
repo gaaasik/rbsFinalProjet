@@ -15,7 +15,7 @@ function refreshTable(IdTable, table) {
 function AddMan() {
     let validate = true
     for (let i = 0; i < DataAssessment.length; i++) {
-        if (DataAssessment[i].nameMan === "" || DataAssessment[i].secondNameMan === "" || DataAssessment[i].resultAssessment === "") {
+        if (DataAssessment[i].nameMan === "" || DataAssessment[i].secondNameMan === "" || DataAssessment[i].patronymic === "") {
             alert("Заполните все поля!")
             validate = false
         } else {
@@ -127,7 +127,7 @@ function AddInMainPage() {
     let assessment = new Assesment($$("nameAssessment").getValue(), $$("dateAses").getValue())
     let employee = new EmployeeClass(choseEmployee)
     for (let i = 0; i < DataAssessment.length; i++) {
-        if (DataAssessment[i].nameMan === "" || DataAssessment[i].secondNameMan === "" || DataAssessment[i].resultAssessment === "") {
+        if (DataAssessment[i].nameMan === "" || DataAssessment[i].secondNameMan === "" || DataAssessment[i].patronymic === "") {
             alert("Заполните все поля кандидатов!");
             validate = false
         } else {
@@ -175,6 +175,8 @@ function viewModel() {
                             timepicker: true,
                             width: 300,
                             left: 10,
+                            stringResult:true
+                           // format:webix.Date.dateToStr("%d/%m/%y")
                         },
                     ]
                 }
@@ -198,7 +200,7 @@ function viewModel() {
                                     view: "datatable",
                                     editable: true,
                                     //select: "row",
-                                    editaction: "dblclick",
+                                    editaction: "click",
                                     navigation: true,
                                     select: "cell",
                                     autoheight: true,
@@ -218,7 +220,7 @@ function viewModel() {
                                     },
                                     columns: [{id: "nameMan", header: "Имя", editor: "text",},
                                         {id: "secondNameMan", header: "Фамилия", editor: "text",},
-                                        {id: "resultAssessment", header: "Результат", width: 300, editor: "text",},
+                                        {id: "patronymic", header: "Отчество", width: 300, editor: "text",},
                                     ],
 
 
