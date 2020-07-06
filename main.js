@@ -1,26 +1,3 @@
-let Assessment = []
-let selectAssessment = [{}]
-let DataAssessment = [
-    {nameMan: "Первый", secondNameMan: "Человек", patronymic: "На земле", }
-]
-let Employee = [
-    {
-        nameEmployee: "Анатолий",
-        secondNameEmployee: "Куценко",
-        experienceEmployee: 2,
-        positionEmployee: "Руководитель отдела"
-    },
-    {
-        nameEmployee: "Дмитрий",
-        secondNameEmployee: "Сычев",
-        experienceEmployee: 3,
-        positionEmployee: "Помощник руководителя"
-    },
-    {nameEmployee: "Екатерина", secondNameEmployee: "Трамовна", experienceEmployee: 4, positionEmployee: "Уборщица"},
-    {nameEmployee: "Глеб", secondNameEmployee: "Мяленко", experienceEmployee: 5, positionEmployee: "Рабочий"}
-]
-let viewIS = true;
-
 function findI(table, it) //поиск индекса строки на которую кликнули
 {
     let is;
@@ -80,7 +57,6 @@ function clickRow(id) {
 
 }
 
-
 function deleteActivity(id, isIn, idTable, data) {
     Assessment.splice(isIn, 1)
     refreshTable(idTable, data);
@@ -89,55 +65,54 @@ function deleteActivity(id, isIn, idTable, data) {
     // $$("smallAdd").close();
 }
 
-function refreshEditor(assesLength,data,employees) {
+function refreshEditor(assesLength, data, employees) {
 
     //название
     $$("nameAssessmentSelect").define("value", selectAssessment[0].nameAssessmentSelect)
     $$("nameAssessmentSelect").refresh();
+
     //дата
+    let date = selectAssessment[0].dateAssessmentSelect
 
-       let date = selectAssessment[0].dateAssessmentSelect
-    console.log("data = ",date)
-    webix.message(webix.Date.dateToStr("%Y-%m-%d")(date));
+   // webix.message(webix.Date.dateToStr("%Y-%m-%d")(date));
     $$("dateSelectAsess").define("value", date);
-     $$("dateSelectAsess").refresh();
+    $$("dateSelectAsess").refresh();
 
 
-    console.log("data = ",data)
     $$("dataAssessmentSelect").clearAll()
-    $$("dataAssessmentSelect").define("data",data);
+    $$("dataAssessmentSelect").define("data", data);
     $$("dataAssessmentSelect").refresh();
 
-    console.log("data = ",employees)
     $$("semployeeTable").clearAll()
-    $$("semployeeTable").define("data",employees);
+    $$("semployeeTable").define("data", employees);
     $$("semployeeTable").refresh();
-    // $$("").define("value",);
-    // $$("").refresh();
 }
 
 webix.ready(function (message) {
-    webix.ui({
+    webix.ui(
+        {
+            css: "main",
             rows: [{
-                view: "toolbar", id: "myToolbar",
+                view: "toolbar", id: "myToolbar", css: "headerMain",
                 cols: [
                     {
+                        css: "headerMain",
                         view: "template",
                         type: "header",
-                        height: 100,
+                        height: 50,
                         template: "Assessment Manager",
                     },
 
                     {
-                        view: "template",
+                        view: "button",
+                        value: "Удалить Мероприятие",
                         id: "delBtn",
                         hidden: true,
                         class: "btn",
-                        template: "Удалить Мероприятие",
-                        css: "delActivityClass",
-                        width: 100,
-                        onClick: {
-                            "delActivityClass": function () {
+                        css: "btnDelete",
+                        width: 150,
+                        on: {
+                            onitemclick: function () {
                                 if (confirm("Вы уверены что хотите удалить это мероприятие?", selectAssessment[0].nameAssessmentSelect)) {
                                     $$("delBtn").define("hidden", true)
                                     $$("smallAdd").define("hidden", true)
@@ -154,30 +129,33 @@ webix.ready(function (message) {
                     }
 
                     , {
-                        view: "template",
+                        view: "button",
                         select: "view",
-                        class: "btn",
+                        class: "btnAdd",
                         width: 150,
-                        template: "Добавить мероприятие",
-                        css: "addActivityClass",
+                        value: "Добавить мероприятие",
+                        css: "btnAdd",
                         id: "addActivity",
-                        onClick: {
-                            "addActivityClass": function () {
-                                viewModel();
+                        on: {
+                            onitemclick: function () {
+
+                                employeeArr = Employee;
+                                choseEmployee = [];
+                                viewModel(employeeArr);
 
                             }
                         }
                     },
                     {
-                        view: "template",
+                        view: "button",
                         select: "view",
                         class: "btn",
                         width: 150,
-                        template: "Редактировать сотрудников",
-                        css: "addEmployeeClass",
+                        value: "Редактировать сотрудников",
+                        css: "btnEdit",
                         id: "addEmployeeInMain",
-                        onClick: {
-                            "addEmployeeClass": function () {
+                        on: {
+                            onitemclick: function () {
                                 editEmployeeInMain();
 
                             }
@@ -190,150 +168,183 @@ webix.ready(function (message) {
                 {
                     rows: [
                         {
-                        cols: [{
-                            view: "datatable",
-                            id: "asesTable",
-                            select: "row",
-                            data: Assessment,
-                            width: 430,
-                            height: 500,
-
-
-                            columns: [{id: "numberAssessment", header: "№", width: 30},
-                                {id: "nameAssessment", width: 200, header: "Название мероприятия"},
-                                {id: "currentState", width: 200, header: "Статус"},
-
-                            ],
-                            on: {
-                                onitemclick: function () {
-
-                                    let selectedId = $$("asesTable").getItem($$("asesTable").getSelectedId()).id;
-                                    let isInAses = findInd(Assessment, selectedId)
-                                    selectAssessment = [];
-                                    selectAssessment.push({
-                                        nameAssessmentSelect: Assessment[isInAses].nameAssessment,
-                                        dateAssessmentSelect: Assessment[isInAses].dateAssessment,
-                                        dataAssessmentSelect:Assessment[isInAses].dataAssessment,
-
-                                    })
-                                    let data=Assessment[isInAses].dataAssessment
-                                    console.log("data",data.dataAssessment[0].nameMan)
-                                    console.log("Assessment[]., = " ,Assessment,)
-
-
-                                    refreshEditor(isInAses,data.dataAssessment,Assessment[isInAses].employeeAssessment.employeeAssessment)
-                                    clickRow(isInAses)
-
-
-                                }
-                            }
-
-                        }
-                            , {view: "resizer"},
-                            {
-                                data: selectAssessment,
-                                id: "smallAdd",
+                            cols: [{
+                                view: "datatable",
+                                id: "asesTable",
+                                css: "dataTable",
+                                select: "row",
+                                data: Assessment,
+                                width: 430,
                                 height: 500,
-                                rows: [{ //
-                                    cols: [
-                                        {
-                                            view: "text",
-                                            id: "nameAssessmentSelect",
-                                            width: 200
-                                        },
-
-                                        {
-                                            id: "dateSelectAsess",
-                                            view: "datepicker",
-                                            label: "Дата",
-                                            //value:1,
-                                            timepicker: true,
-                                            width: 300,
-                                            left: 10,
-
-                                        },{cols:[{
-                                                view: "template",
-                                                template:"Статус:",
-                                                id: "current", width: 200,
 
 
-                                            },{view: "template", //////////тут должен быть статус
-                                                 }]}
-                                    ]
-    //|||
+                                columns: [{id: "numberAssessment", header: "№", width: 30},
+                                    {id: "nameAssessment", width: 200, header: "Название мероприятия"},
+                                    {id: "currentState", width: 180, header: "Статус"},
+
+                                ],
+                                on: {
+                                    onitemclick: function () {
+
+                                        let selectedId = $$("asesTable").getItem($$("asesTable").getSelectedId()).id;
+                                        let isInAses = findInd(Assessment, selectedId)
+                                        selectAssessment = [];
+                                        selectAssessment.push({
+                                            nameAssessmentSelect: Assessment[isInAses].nameAssessment,
+                                            dateAssessmentSelect: Assessment[isInAses].dateAssessment,
+                                            dataAssessmentSelect: Assessment[isInAses].dataAssessment,
+                                            currentStateSelect: Assessment[isInAses].currentState,
+
+
+                                        })
+                                        let data = Assessment[isInAses].dataAssessment
+                                        console.log("currentState = ", selectAssessment[0].currentStateSelect)
+
+                                        refreshEditor(isInAses, data.dataAssessment, Assessment[isInAses].employeeAssessment.employeeAssessment)
+                                        clickRow(isInAses)
+
+
+                                    }
                                 }
-                                    , {
-                                        rows: [{
-                                            cols: [{
-                                                view: "template", width: 500,
-                                                type: "header", template: "Кандидаты"
-                                            }, {
-                                                view: "template",
-                                                type: "header", template: "Сотрудники"
-                                            }]
-                                        }]
-                                    },
-                                    {
+
+                            }
+                                ,
+                                {
+                                    hidden: true,
+                                    data: selectAssessment,
+                                    id: "smallAdd",
+                                    height: 500,
+                                    rows: [{ //
                                         cols: [
-                                            { //кандидаты
-                                                id: "dataAssessmentSelect",
-                                                view: "datatable",
-                                                editable: true,
-                                                editaction: "dblclick",
-                                                navigation: true,
-                                                select: "cell",
-                                                autoheight: true,
-                                                autowidth: true,
-                                                //
-                                                data: DataAssessment,
+                                            {
+                                                view: "text",
+                                                css: "nameAses",
+                                                placeholder: "Введите название",
+                                                id: "nameAssessmentSelect",
+                                                width: 200,
 
-                                                autoConfig: true,
-                                                columns: [{id: "nameMan", header: "Имя", value:"Начало",editor: "text", },
-                                                    {id: "secondNameMan", header: "Фамилия", editor: "text",},
-                                                    {id: "patronymic", header: "Отчество",editor: "text", },
-                                                    {id: "birthday",header: "Дата Рождения",editor: "text",}
-                                                        ],
+                                            },
 
-                                            }, {view: "resizer"},
-                                            { //работники
-                                                id: "semployeeTable",
-                                                view: "datatable",
-                                                select: "row",
-                                                navigation: true,
-                                                autoheight: true,
-                                                autowidth: true,
-                                                data: Assessment,
-                                                autoConfig: true,
-                                                columns: [{id: "nameEmployee", header: "Имя"},
-                                                    {id: "secondNameEmployee", header: "Фамилия"},
-                                                    {id: "experienceEmployee", header: "Опыт работы(лет)", width: 40},
-                                                    {id: "positionEmployee", header: "Должность", width: 200}
+                                            {
+                                                id: "dateSelectAsess",
+                                                view: "datepicker",
+                                                label: "Дата",
+                                                //value:1,
+                                                timepicker: true,
+                                                width: 300,
+                                                left: 10,
 
-                                                ],
-
-
+                                            }, {
+                                                    view: "button",
+                                                    select: "view",
+                                                     template:"",/////////тут должен быть статус
+                                                    id: "currentStateSelect",
+                                                    width: 100,
+                                                    css:"btnAdd",
+                                                    on: {onItemClick:function () {
+                                                            console.log("current vaslue = ",$$("currentStateSelect").getValue())
+                                                        }}
                                             }
                                         ]
-                                    },
-                                    {
-                                        cols: [{
-                                            view: "button",
-                                            class: "btn",
-                                            value: "Добавить человека",
-                                            click: "",
-                                            width: 200
-                                        },
-                                            {
-                                                view: "button",
-                                                class: "btn",
-                                                value: "Добавить сотрудника",
-                                                click: "",
-                                                width: 200
+
+                                    } //////////////
+                                        , {
+                                            rows: [{
+                                                cols: [{
+                                                    view: "template", width: 500,
+                                                    type: "header", template: "Кандидаты",
+                                                    css:"nameAses"
+                                                }, {
+                                                    view: "template",
+                                                    type: "header", template: "Сотрудники",
+                                                    css:"nameAses"
+                                                }]
                                             }]
-                                    },
-                                ]
-                            }]
-                    }]
+                                        },
+                                        {
+                                            cols: [
+                                                { //кандидаты
+                                                    id: "dataAssessmentSelect",
+                                                    view: "datatable",
+                                                    css:"dataTable",
+                                                    editable: true,
+                                                    editaction: "dblclick",
+                                                    navigation: true,
+                                                    select: "cell",
+                                                    autoheight: true,
+                                                    autowidth: true,
+                                                    //
+                                                    data: selectAssessment,
+
+                                                    autoConfig: true,
+                                                    columns: [{
+                                                        id: "nameMan",
+                                                        header: "Имя",
+                                                        value: "Начало",
+                                                        editor: "text",
+                                                    },
+                                                        {id: "secondNameMan", header: "Фамилия", editor: "text",},
+                                                        {id: "patronymic", header: "Отчество", editor: "text",},
+                                                        {id: "birthday", header: "Результат", editor: "text",}
+                                                    ],
+
+                                                }, {view: "resizer"},
+                                                { //работники
+                                                    id: "semployeeTable",
+                                                    view: "datatable",
+                                                    select: "row",
+                                                    navigation: true,
+                                                    autoheight: true,
+                                                    autowidth: true,
+                                                    data: Assessment,
+                                                    css: "dataTable",
+                                                    autoConfig: true,
+                                                    columns: [{id: "nameEmployee", header: "Имя"},
+                                                        {id: "secondNameEmployee", header: "Фамилия"},
+                                                        {
+                                                            id: "experienceEmployee",
+                                                            header: "Опыт работы(лет)",
+                                                            width: 40
+                                                        },
+                                                        {id: "positionEmployee", header: "Должность", width: 200}
+
+                                                    ],
+
+
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            cols: [{
+                                                data: selectAssessment,
+                                                view: "button",
+                                                class: "btnAdd",
+                                                value: "Добавить человека",
+                                                on: {
+                                                    onItemClick: function () {
+                                                        AddCandidate("dataAssessmentSelect",selectAssessment[0].dataAssessmentSelect.dataAssessment)
+                                                        console.log("Select ases = jr",)
+                                                    }},
+                                                width: 200
+                                            },
+                                                {   data: selectAssessment,
+                                                    view: "button",
+                                                    class: "btnAdd",
+                                                    value: "Добавить сотрудника",
+                                                    width: 200, on: {
+                                                        onItemClick: function () {
+//////////////
+                                                            AddEmployee(choseEmployee, "semployeeTable", employeeArr)
+                                                            console.log( "Assessment = ",Assessment)
+                                                            console.log( "Assessment = ",Assessment)
+
+                                                        }
+                                                    }
+                                                }]
+                                        },
+                                    ]
+                                }]
+                        }]
                 }
 
             ]

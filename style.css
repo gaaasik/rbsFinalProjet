@@ -1,10 +1,103 @@
-.btn {
+.btnAdd button.webix_button{
     background-color: #4CAF50; /* Green */
     border: none;
     color: white;
-    padding: 15px 32px;
+    /*padding: 15px 32px;*/
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 16px;
+    font-size: 16px;border-radius: 20px;
+}
+.btnEdit button.webix_button{
+    background-color: #BAB302; /* yellow */
+    border: none;
+    color: white;
+    /*padding: 15px 32px;*/
+    text-align: center;
+    text-decoration: none;
+    /*display: inline-block;*/
+    font-size: 16px;border-radius: 20px;
+}
+button:hover {
+    color: black;
+}
+.btnSave button.webix_button{
+    background-color: #4053FF; /* yellow */
+    border: none;
+    color: white;
+    /*padding: 15px 32px;*/
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;border-radius: 20px;
+}
+.btnDelete button.webix_button{
+    background-color: #FF0F0F; /* yellow */
+    border: none;
+    color: white;
+    /*padding: 15px 32px;*/
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;border-radius: 20px;
+}
+.btnDeleteWindow button.webix_button {
+    background-color: #FF0F0F; /* yellow */
+    border: none;
+    color: white;
+    position: absolute;
+    right: 10px;
+    bottom: 2.5px;
+    height: 35px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    width: 200px;
+    align:right;
+    font-size: 16px;border-radius: 20px;
+}
+.main {
+    background: #CFD7FE;
+}
+.currentState{
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    /*padding: 15px 32px;*/
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;border-radius: 20px;
+
+}
+.headerMain{
+
+    background: #CFD7FE;
+
+}
+.dataTable .webix_hcell{
+    background:#909CFF;
+    color:black;
+
+
+}
+.dataTable{background-color: #CFD7FE;
+    color: black;
+ }
+.dataTable .webix_header{
+    background-color: #909CFF;
+}
+.dataTable .webix_column{
+
+    background:#AFB7FF;
+}
+.dataTable .webix_column > div{
+    border-color:#AFB7FF;
+}
+.nameAses 	{
+    background-color: #909CFF;
+}
+.windowTemplate{
+    text-align: left;
+    background-color: #CFD7FE;
 }

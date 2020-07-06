@@ -2,7 +2,7 @@ function editEmployeeInMain() {
     console.log("chose Employee = ", Employee)
     webix.ui({
             view: "window",
-            close: true,
+
             modal: true,
             id:"modalWindowEmployee",
             width: 700,
@@ -34,13 +34,13 @@ function editEmployeeInMain() {
                         }}
 
                 }, {
-                    cols: [{view: "button",hidden:true, id: "deleteEmployee",value: "убрать сотрудника", click:"deleteEmployee()"}, {
-                        view: "button", value: "Внести сотрудника в таблицу", click: "addEmployeeInTable()",
+                    cols: [{view: "button",css:"btnDelete", hidden:true, id: "deleteEmployee",value: "убрать сотрудника", click:"deleteEmployee()"}, {
+                        view: "button", css:"btnAdd", value: "Внести сотрудника в таблицу", click: "addEmployeeInTable()",
 
                     }]
 
                 },{
-                    view: "button", value: "Сохранить изменения и выйти", click: "pushAllChangeEmployee()"}]}
+                    view: "button", css:"btnSave", value: "Сохранить изменения и выйти", click: "pushAllChangeEmployee()"}]}
 
         }
     ).show()
