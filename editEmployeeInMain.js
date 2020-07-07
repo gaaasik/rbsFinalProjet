@@ -89,7 +89,7 @@ function addEmployeeInTable() {
 }
 
 function pushEmployee() {
-    console.log("name = ", $$("nameNewEmployee").getValue())
+
     if(($$("nameNewEmployee").getValue()==="")||($$("secondNameNewEmployee").getValue()==="")||($$("experienceNewEmployee").getValue()==="")||($$("positionNewEmployee").getValue()===""))
     { alert("Заполнены не все поля")}
     else {
@@ -110,7 +110,16 @@ function pushEmployee() {
     }
 
 }
+function returnEmployee(data,dataMain) {
+    dataMain.push({
+        nameEmployee: data.nameEmployee,
+        secondNameEmployee : data.secondNameEmployee,
+        experienceEmployee: data.experienceEmployee,
+        positionEmployee: data.positionEmployee
 
+    })
+
+}
 function deleteCandidateFromWindow() {
     refreshTable("dataCols", DataAssessment);
     let candidateId = $$("dataCols").getItem($$("dataCols").getSelectedId().id)

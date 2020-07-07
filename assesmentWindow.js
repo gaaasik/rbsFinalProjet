@@ -41,7 +41,6 @@ function delRowFromTable(table, textIdTable,employeeArrr) {
         positionEmployee: table[isInTable].positionEmployee
     })}
     table.splice(isInTable, 1)
-
     refreshTable(textIdTable, table)
 
 }
@@ -88,7 +87,6 @@ function AddEmployee(choseEmploye,idTabel,employeeArr) {
                                 let employeeId = $$("choseEmployeeTable").getItem($$("choseEmployeeTable").getSelectedId()).id
                                 let isInEmployee = findI(Employee,employeeId)
                                 let isInChoseEmploeyy = findI(choseEmploye,employeeId)
-                                console.log("isInEmployee = ",isInEmployee,"isInChoseEmploeyy = ",isInChoseEmploeyy,)
                                 if (isInChoseEmploeyy>-1){
                                     alert("Этот сотрудник уже в списке")
                                 }
@@ -104,8 +102,8 @@ function AddEmployee(choseEmploye,idTabel,employeeArr) {
                                 })
                                    employeeArr.splice(isInEmployee,1)
                                     //  refreshTable("employeeTable", choseEmployee)
-
-                                    refreshTable(idTabel, choseEmployee)
+                                    console.log("choseEmploye = ",choseEmploye)
+                                    refreshTable(idTabel, choseEmploye)
 
                                 $$("addEmpl").close()
 
