@@ -72,7 +72,7 @@ function AddEmployee(choseEmploye,idTabel,employeeArr) {
                         navigation: true,
                         autoheight: true,
                         autowidth: true,
-                        data: employeeArr,
+                        data: Employee,
                         autoConfig: true,
 
                         columns: [{id: "nameEmployee", header: "Имя"},

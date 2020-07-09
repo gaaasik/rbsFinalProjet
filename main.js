@@ -194,6 +194,7 @@ webix.ready(function (message) {
                                         let selectedId = $$("asesTable").getItem($$("asesTable").getSelectedId()).id;
                                         let isInAses = findInd(Assessment, selectedId)
                                         selectAssessment = [];
+                                        console.log("Assessment[isInAses].employeeAssessment = ",Assessment[isInAses].employeeAssessment.employeeAssessment)
                                         selectAssessment.push({
                                             nameAssessmentSelect: Assessment[isInAses].nameAssessment,
                                             dateAssessmentSelect: Assessment[isInAses].dateAssessment,
@@ -381,9 +382,11 @@ webix.ready(function (message) {
 
                                                                 on: {
                                                                     onItemClick: function () {
-                                                                        AddEmployee(selectAssessment[0].employeeAssessment.employeeAssessment, "semployeeTable", employeeArr)
-
-
+                                                                     ///   AddEmployee(selectAssessment[0].employeeAssessment.employeeAssessment, "semployeeTable", employeeArr)
+                                                                        console.log("Employee = ",Employee)
+                                                                        console.log("chose employee  = ",choseEmployee)
+                                                                        console.log("employee arr = ", employeeArr)
+                                                                        console.log("selectAssessment[0].employeeAssessment.employeeAssessment = ",selectAssessment[0].employeeAssessment.employeeAssessment)
                                                                     }
                                                                 }
                                                             },
@@ -396,12 +399,13 @@ webix.ready(function (message) {
                                                                     value: "Убрать сотрудника",
                                                                     on: {
                                                                         onItemClick: function () {
-                                                                            console.log("selectAssessment length = ", selectAssessment[0].employeeAssessment.employeeAssessment)
+                                                                            console.log("selectAssessment 111 = ", selectAssessment[0].employeeAssessment)
                                                                             returnEmployee(selectAssessment[0].employeeAssessment.employeeAssessment,Employee)
 
                                                                             delRowFromTable(selectAssessment[0].employeeAssessment.employeeAssessment, "semployeeTable", "")
                                                                             console.log("Employee name = ", selectAssessment)
-                                                                             if (selectAssessment[0].employeeAssessment.employeeAssessment.length === 0) {
+
+                                                                            if (selectAssessment[0].employeeAssessment.employeeAssessment.length === 0) {
                                                                                 $$("btnDeleteEmployee").define("hidden", true)
                                                                                 $$("btnDeleteEmployee").refresh()
                                                                             }
