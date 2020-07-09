@@ -65,8 +65,9 @@ function deleteActivity(id, isIn, idTable, data) {
     // $$("smallAdd").close();
 }
 
-function refreshEditor(assesLength, data, employees) {
+function refreshEditor(assesLength, data, employees,mainData) {
 
+   // mainData.currentState = selectAssessment[0].currentState
     //название
     $$("nameAssessmentSelect").define("value", selectAssessment[0].nameAssessmentSelect)
     $$("nameAssessmentSelect").refresh();
@@ -144,7 +145,7 @@ webix.ready(function (message) {
 
                                 employeeArr = Employee;
                                 choseEmployee = [];
-                                viewModel(employeeArr);
+                                AddAssessment(employeeArr);
 
                             }
                         }
@@ -200,15 +201,16 @@ webix.ready(function (message) {
                                             dateAssessmentSelect: Assessment[isInAses].dateAssessment,
                                             dataAssessmentSelect: Assessment[isInAses].dataAssessment,
                                             currentStateSelect: Assessment[isInAses].currentState,
-                                            employeeAssessment:Assessment[isInAses].employeeAssessment
-
-
+                                            employeeAssessment:Assessment[isInAses].employeeAssessment,
+                                            isInAssess:isInAses
                                         })
-                                        console.log("ceurrent = ", selectAssessment[0].currentStateSelect)
-                                        let data = Assessment[isInAses].dataAssessment
 
-                                        refreshEditor(isInAses, data.dataAssessment, Assessment[isInAses].employeeAssessment.employeeAssessment)
+                                        let data = Assessment[isInAses].dataAssessment
+                                        checkState(Assessment[isInAses].currentState)
+                                        console.log("state = " ,Assessment[isInAses].currentState)
+                                        refreshEditor(isInAses, data.dataAssessment, Assessment[isInAses].employeeAssessment.employeeAssessment,Assessment[isInAses])
                                         clickRow(isInAses)
+                                        return (isInAses)
 
 
                                     }
@@ -225,7 +227,7 @@ webix.ready(function (message) {
                                         cols: [
                                             {
                                                 view: "text",
-                                                css: "nameAses",
+                                               // css: "nameAses",
                                                 placeholder: "Введите название",
                                                 id: "nameAssessmentSelect",
                                                 width: 200,
@@ -243,8 +245,7 @@ webix.ready(function (message) {
 
                                             }, {
                                                 view: "button",
-                                                //value: "",//selectAssessment[0].currentStateSelect,/////////тут должен быть статус
-                                                id: "currentStateSelect",
+                                                 id: "currentStateSelect",
                                                 width: 150,
                                                 css: "btnAdd",
                                                 on: {
@@ -259,11 +260,12 @@ webix.ready(function (message) {
                                         , {
                                             rows: [{
                                                 cols: [{
-                                                    view: "template", width: 400,
+                                                    view: "template", width: 500,
                                                     type: "header", template: "Кандидаты",
                                                     css: "nameAses"
                                                 }, {
                                                     view: "template",
+                                                    width: 500,
                                                     type: "header", template: "Сотрудники",
                                                     css: "nameAses"
                                                 }]
@@ -286,7 +288,8 @@ webix.ready(function (message) {
                                                         autoConfig: true,
                                                         on: {
                                                             onItemClick: function () {
-                                                                console.log("sssssssss")
+                                                                console.log("currentStateSelect",selectAssessment[0].currentStateSelect)
+                                                                if (selectAssessment[0].currentStateSelect==="Создано")
                                                                 $$("btnDeleteCandidate").show();
 
                                                             }
@@ -297,14 +300,16 @@ webix.ready(function (message) {
                                                             value: "Начало",
                                                             editor: "text",
                                                         },
-                                                            {id: "secondNameMan", header: "Фамилия", editor: "text",},
+                                                            {id: "secondNameMan", header: "Фамилия", editor: "text",placeholder:"Введите Имя"},
                                                             {id: "patronymic", header: "Отчество", editor: "text",},
-                                                            {id: "birthday", header: "Результат", editor: "text",}],},
+                                                            {id: "ResultAssessment", header: "Результат",width: 300, editor: "text",}],},
                                                         {cols:[ {
 
                                                                 data: selectAssessment,
                                                                 view: "button",
                                                                 class: "btnAdd",
+                                                                hidden: false,
+                                                                id: "btnAddCandidate",
                                                                 value: "Добавить человека",
                                                                 width: 200,
                                                                 on: {
@@ -325,8 +330,7 @@ webix.ready(function (message) {
                                                                     value: "Убрать человека",
                                                                     on: {
                                                                         onItemClick: function () {
-                                                                            console.log("select assessment = ", selectAssessment[0].dataAssessmentSelect.dataAssessment)
-                                                                            delRowFromTable(selectAssessment[0].dataAssessmentSelect.dataAssessment, "dataAssessmentSelect", "")
+                                                                              delRowFromTable(selectAssessment[0].dataAssessmentSelect.dataAssessment, "dataAssessmentSelect", "")
                                                                             if (selectAssessment[0].dataAssessmentSelect.dataAssessment.length === 0) {
                                                                                 $$("btnDeleteCandidate").define("hidden", true)
                                                                                 $$("btnDeleteCandidate").refresh()
@@ -343,6 +347,7 @@ webix.ready(function (message) {
                                         } ,
 
                                                 {view: "resizer"},
+
                                                 {rows:[{ //работники
                                                         id: "semployeeTable",
                                                         view: "datatable",
@@ -355,6 +360,7 @@ webix.ready(function (message) {
                                                         autoConfig: true,
                                                         on: {
                                                             onItemClick: function () {
+                                                                if (selectAssessment[0].currentStateSelect==="Создано")
                                                                 $$("btnDeleteEmployee").show();
 
                                                             }
@@ -364,7 +370,7 @@ webix.ready(function (message) {
                                                             {
                                                                 id: "experienceEmployee",
                                                                 header: "Опыт работы(лет)",
-                                                                width: 40
+                                                                width: 100
                                                             },
                                                             {id: "positionEmployee", header: "Должность", width: 200}
 
@@ -378,6 +384,7 @@ webix.ready(function (message) {
                                                                 class: "btnAdd",
                                                                 width: 200,
                                                                 right:50,
+                                                                id: "btnAddEmployee",
                                                                 value: "Добавить сотрудника",
 
                                                                 on: {
@@ -399,12 +406,11 @@ webix.ready(function (message) {
                                                                     value: "Убрать сотрудника",
                                                                     on: {
                                                                         onItemClick: function () {
-                                                                            console.log("selectAssessment 111 = ", selectAssessment[0].employeeAssessment.employeeAssessment)
-                                                                            returnEmployee(selectAssessment[0].employeeAssessment.employeeAssessment,Employee)
+                                                                              returnEmployee(selectAssessment[0].employeeAssessment.employeeAssessment,Employee)
                                                                             //  delRowFromTable(selectAssessment[0].employeeAssessment.employeeAssessment, "semployeeTable", "")
 
 
-                                                                            if (selectAssessment[0].employeeAssessment.employeeAssessment.length === 0) {
+                                                                            if ((selectAssessment[0].employeeAssessment.employeeAssessment.length === 0)) {
                                                                                 $$("btnDeleteEmployee").define("hidden", true)
                                                                                 $$("btnDeleteEmployee").refresh()
                                                                             }
@@ -412,7 +418,12 @@ webix.ready(function (message) {
                                                                     }
 
                                                                     ///
-                                                                }]}
+                                                                },{ id: "btnEndAssessmentS",
+                                                                    view: "button",
+                                                                    hidden: true,
+                                                                    width: 200,
+                                                                    position:"absolute",
+                                                                    value: "Завершить Собеседование"}]}
 
                                                     ]}
 

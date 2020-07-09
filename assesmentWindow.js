@@ -164,10 +164,10 @@ function AddInMainPage() {
     }
 }
 
-function viewModel(employeeArr) {
+function AddAssessment(employeeArr) {
     var popup = webix.ready(function () {
         webix.ui({
-            view: "window",
+            view: "window", height: 100,
             head:{view:"template",
                 template:"Введите данные о мероприятии",
                 css:"windowTemplate"},
@@ -200,7 +200,7 @@ function viewModel(employeeArr) {
                                 view: "template", width: 500,
                                 type: "header", template: "Кандидаты"
                             }, {
-                                css:"nameAses",
+                                css:"nameAses",width: 608,
                                 view: "template",
                                 type: "header", template: "Сотрудники"
                             }]

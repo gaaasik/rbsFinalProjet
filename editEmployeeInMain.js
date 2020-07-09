@@ -110,6 +110,7 @@ function pushEmployee() {
     }
 
 }
+
 function returnEmployee(data,dataMain) {
     console.log("data = ",dataMain)
     console.log("nameEmployee = ", data.nameEmployee)
@@ -122,6 +123,7 @@ function returnEmployee(data,dataMain) {
     })
 
 }
+
 function deleteCandidateFromWindow() {
     refreshTable("dataCols", DataAssessment);
     let candidateId = $$("dataCols").getItem($$("dataCols").getSelectedId().id)
