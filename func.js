@@ -22,7 +22,8 @@ function changeState(state) {
         // }
 
 
-        checkState(state)
+        checkState(state);
+        console.log("")
         selectAssessment[0].currentStateSelect = state;
         Assessment[selectAssessment[0].isInAssess].currentState = state
 
