@@ -111,7 +111,7 @@ function pushEmployee() {
 
 }
 function returnEmployee(data,dataMain) {
-    console.log("data = ",data)
+    console.log("data = ",dataMain)
     console.log("nameEmployee = ", data.nameEmployee)
     dataMain.push({
         nameEmployee: data.nameEmployee,

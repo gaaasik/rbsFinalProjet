@@ -134,6 +134,7 @@ function AddInMainPage() {
     let candidate = new Candidate(DataAssessment)
     let assessment = new Assesment($$("nameAssessment").getValue(), $$("dateAses").getValue())
     let employee = new EmployeeClass(choseEmployee)
+    console.log("employee = ",employee)
     for (let i = 0; i < DataAssessment.length; i++) {
         if (DataAssessment[i].nameMan === "" || DataAssessment[i].secondNameMan === "" || DataAssessment[i].patronymic === "") {
             alert("Заполните все поля кандидатов!");
@@ -323,7 +324,9 @@ function viewModel(employeeArr) {
                             view: "button",
                             css: "btnAdd",
                             value: "Добавить мероприятие",
-                            click: "AddInMainPage()",
+                            on:{onItemClick: function () { AddInMainPage()
+
+                                }},
                             width: 300,
                             height: 100
                         },

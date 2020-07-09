@@ -399,11 +399,10 @@ webix.ready(function (message) {
                                                                     value: "Убрать сотрудника",
                                                                     on: {
                                                                         onItemClick: function () {
-                                                                            console.log("selectAssessment 111 = ", selectAssessment[0].employeeAssessment)
+                                                                            console.log("selectAssessment 111 = ", selectAssessment[0].employeeAssessment.employeeAssessment)
                                                                             returnEmployee(selectAssessment[0].employeeAssessment.employeeAssessment,Employee)
+                                                                            //  delRowFromTable(selectAssessment[0].employeeAssessment.employeeAssessment, "semployeeTable", "")
 
-                                                                            delRowFromTable(selectAssessment[0].employeeAssessment.employeeAssessment, "semployeeTable", "")
-                                                                            console.log("Employee name = ", selectAssessment)
 
                                                                             if (selectAssessment[0].employeeAssessment.employeeAssessment.length === 0) {
                                                                                 $$("btnDeleteEmployee").define("hidden", true)
