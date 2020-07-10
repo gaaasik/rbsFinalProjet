@@ -9,8 +9,13 @@ class EmployeeClass {
     set Employee(employee){
         this.employeeAssessment = employee;
     }
-    inputData(smt){
-        console.log("smt = ", smt)
-    }
+
+AddEmployeeInTable(employee[],string){}
+DeleteEmployeeFromTable(employee[],string){}
+AddNewEmployee(){}
+DeleteEmployee(string){}
+EditEmployee(){}
+
+
 }
 

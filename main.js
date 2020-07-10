@@ -65,9 +65,9 @@ function deleteActivity(id, isIn, idTable, data) {
     // $$("smallAdd").close();
 }
 
-function refreshEditor(assesLength, data, employees,mainData) {
+function refreshEditor(assesLength, data, employees, mainData) {
 
-   // mainData.currentState = selectAssessment[0].currentState
+    // mainData.currentState = selectAssessment[0].currentState
     //название
     $$("nameAssessmentSelect").define("value", selectAssessment[0].nameAssessmentSelect)
     $$("nameAssessmentSelect").refresh();
@@ -89,7 +89,6 @@ function refreshEditor(assesLength, data, employees,mainData) {
     $$("semployeeTable").define("data", employees);
     $$("semployeeTable").refresh();
 }
-
 
 webix.ready(function (message) {
 
@@ -180,13 +179,13 @@ webix.ready(function (message) {
                                 scroll: "auto",
                                 select: "row",
                                 data: Assessment,
-                                width: 430,
+                                width: 330,
                                 height: 500,
 
 
                                 columns: [{id: "numberAssessment", header: "№", width: 30},
                                     {id: "nameAssessment", width: 200, header: "Название мероприятия"},
-                                    {id: "currentState", width: 200, header: "Статус"}
+                                    {id: "currentState", width: 100, header: "Статус"}
 
                                 ],
                                 on: {
@@ -195,22 +194,24 @@ webix.ready(function (message) {
                                         let selectedId = $$("asesTable").getItem($$("asesTable").getSelectedId()).id;
                                         let isInAses = findInd(Assessment, selectedId)
                                         selectAssessment = [];
-                                        console.log("Assessment[isInAses].employeeAssessment = ",Assessment[isInAses].employeeAssessment.employeeAssessment)
+                                        console.log("Assessment[isInAses].employeeAssessment = ", Assessment[isInAses].employeeAssessment.employeeAssessment)
+                                        let candidate = new Candidate(Assessment[isInAses].dataAssessment.dataAssessment)
+                                        candidate.logDataCandidate()
                                         selectAssessment.push({
                                             nameAssessmentSelect: Assessment[isInAses].nameAssessment,
                                             dateAssessmentSelect: Assessment[isInAses].dateAssessment,
                                             dataAssessmentSelect: Assessment[isInAses].dataAssessment,
                                             currentStateSelect: Assessment[isInAses].currentState,
-                                            employeeAssessment:Assessment[isInAses].employeeAssessment,
-                                            isInAssess:isInAses
+                                            employeeAssessment: Assessment[isInAses].employeeAssessment,
+                                            isInAssess: isInAses
                                         })
 
                                         let data = Assessment[isInAses].dataAssessment
                                         checkState(Assessment[isInAses].currentState)
-                                        console.log("state = " ,Assessment[isInAses].currentState)
-                                        refreshEditor(isInAses, data.dataAssessment, Assessment[isInAses].employeeAssessment.employeeAssessment,Assessment[isInAses])
+                                        console.log("state = ", candidate)
+                                        refreshEditor(isInAses, candidate.dataAssessment, Assessment[isInAses].employeeAssessment.employeeAssessment, Assessment[isInAses])
                                         clickRow(isInAses)
-                                        return (isInAses)
+                                        return (isInAses, candidate)
 
 
                                     }
@@ -222,12 +223,12 @@ webix.ready(function (message) {
                                     hidden: true,
                                     data: selectAssessment,
                                     id: "smallAdd",
-                                    height: 500,
+                                    height: 400,
                                     rows: [{ //
                                         cols: [
                                             {
                                                 view: "text",
-                                               // css: "nameAses",
+                                                // css: "nameAses",
                                                 placeholder: "Введите название",
                                                 id: "nameAssessmentSelect",
                                                 width: 200,
@@ -245,12 +246,12 @@ webix.ready(function (message) {
 
                                             }, {
                                                 view: "button",
-                                                 id: "currentStateSelect",
+                                                id: "currentStateSelect",
                                                 width: 150,
                                                 css: "btnAdd",
                                                 on: {
                                                     onItemClick: function () {
-                                                         changeState(selectAssessment[0].currentStateSelect)
+                                                        changeState(selectAssessment[0].currentStateSelect)
                                                     }
                                                 }
                                             }
@@ -265,7 +266,7 @@ webix.ready(function (message) {
                                                     css: "nameAses"
                                                 }, {
                                                     view: "template",
-                                                    width: 500,
+                                                    width: 400,
                                                     type: "header", template: "Сотрудники",
                                                     css: "nameAses"
                                                 }]
@@ -273,37 +274,55 @@ webix.ready(function (message) {
                                         },
                                         {
                                             cols: [
-                                                { rows:[ //кандидаты
-                                                    {id: "dataAssessmentSelect",
-                                                        view: "datatable",
-                                                        css: "dataTable",
-                                                        editable: true,
-                                                        editaction: "dblclick",
-                                                        navigation: true,
-                                                        select: "cell",
-                                                        autoheight: true,
-                                                        autowidth: true,
-                                                        //
-                                                        data: selectAssessment,
-                                                        autoConfig: true,
-                                                        on: {
-                                                            onItemClick: function () {
-                                                                console.log("currentStateSelect",selectAssessment[0].currentStateSelect)
-                                                                if (selectAssessment[0].currentStateSelect==="Создано")
-                                                                $$("btnDeleteCandidate").show();
+                                                {
+                                                    rows: [ //кандидаты
+                                                        {
+                                                            id: "dataAssessmentSelect",
+                                                            view: "datatable",
+                                                            css: "dataTable",
+                                                            editable: true,
+                                                            editaction: "dblclick",
+                                                            autoConfig: true,
+                                                            navigation: true,
+                                                            select: "cell",
+                                                            autoheight: true,
+                                                            // autowidth: true,
+                                                            width: 500,
+                                                            //
+                                                            data: selectAssessment,
 
-                                                            }
+                                                            on: {
+                                                                onItemClick: function () {
+                                                                    console.log("currentStateSelect", selectAssessment[0].currentStateSelect)
+                                                                    if (selectAssessment[0].currentStateSelect === "Создано")
+                                                                        $$("btnDeleteCandidate").show();
+
+                                                                }
+                                                            },
+                                                            columns: [{
+                                                                id: "nameMan",
+                                                                header: "Имя",
+                                                                value: "Начало",
+                                                                editor: "text",
+                                                            },
+                                                                {
+                                                                    id: "secondNameMan",
+                                                                    header: "Фамилия",
+                                                                    editor: "text",
+                                                                    placeholder: "Введите Имя"
+                                                                },
+                                                                {id: "patronymic", header: "Отчество", editor: "text",},
+                                                                {
+                                                                    id: "ResultAssessment",
+                                                                    header: "Результат",
+                                                                    width: 300,
+                                                                    editor: "text",
+                                                                }
+                                                                // {id:""}
+                                                            ],
                                                         },
-                                                        columns: [{
-                                                            id: "nameMan",
-                                                            header: "Имя",
-                                                            value: "Начало",
-                                                            editor: "text",
-                                                        },
-                                                            {id: "secondNameMan", header: "Фамилия", editor: "text",placeholder:"Введите Имя"},
-                                                            {id: "patronymic", header: "Отчество", editor: "text",},
-                                                            {id: "ResultAssessment", header: "Результат",width: 300, editor: "text",}],},
-                                                        {cols:[ {
+                                                        {
+                                                            cols: [{
 
                                                                 data: selectAssessment,
                                                                 view: "button",
@@ -314,10 +333,8 @@ webix.ready(function (message) {
                                                                 width: 200,
                                                                 on: {
                                                                     onItemClick: function () {
-                                                                        AddCandidate("dataAssessmentSelect", selectAssessment[0].dataAssessmentSelect.dataAssessment)
-                                                                        console.log("Select ases = jr",)
-
-                                                                        console.log("select = ", selectAssessment)
+                                                                        let candidate = new Candidate(selectAssessment[0].dataAssessmentSelect.dataAssessment)
+                                                                        candidate.AddCandidate("dataAssessmentSelect")
                                                                     }
                                                                 },
 
@@ -330,38 +347,40 @@ webix.ready(function (message) {
                                                                     value: "Убрать человека",
                                                                     on: {
                                                                         onItemClick: function () {
-                                                                              delRowFromTable(selectAssessment[0].dataAssessmentSelect.dataAssessment, "dataAssessmentSelect", "")
-                                                                            if (selectAssessment[0].dataAssessmentSelect.dataAssessment.length === 0) {
+                                                                            let candidate = new Candidate(selectAssessment[0].dataAssessmentSelect.dataAssessment)
+                                                                            candidate.DeleteCandidate("dataAssessmentSelect")
+                                                                            if (candidate.length === 0) {
                                                                                 $$("btnDeleteCandidate").define("hidden", true)
                                                                                 $$("btnDeleteCandidate").refresh()
-                                                                            }
+                                                                            } //если кандидатов больше нет то прячем кнопку
                                                                         }
                                                                     }
 
-                                                                }]}
+                                                                }]
+                                                        }
                                                     ]
 
 
-
-
-                                        } ,
+                                                },
 
                                                 {view: "resizer"},
 
-                                                {rows:[{ //работники
+                                                {
+                                                    rows: [{ //работники
                                                         id: "semployeeTable",
                                                         view: "datatable",
                                                         select: "row",
                                                         navigation: true,
                                                         autoheight: true,
-                                                        autowidth: true,
+                                                        // autowidth: true,
+                                                        width: 400,
                                                         data: selectAssessment,
                                                         css: "dataTable",
                                                         autoConfig: true,
                                                         on: {
                                                             onItemClick: function () {
-                                                                if (selectAssessment[0].currentStateSelect==="Создано")
-                                                                $$("btnDeleteEmployee").show();
+                                                                if (selectAssessment[0].currentStateSelect === "Создано")
+                                                                    $$("btnDeleteEmployee").show();
 
                                                             }
                                                         },
@@ -378,22 +397,23 @@ webix.ready(function (message) {
 
 
                                                     },
-                                                        {cols:[ {
+                                                        {
+                                                            cols: [{
                                                                 data: selectAssessment,
                                                                 view: "button",
                                                                 class: "btnAdd",
                                                                 width: 200,
-                                                                right:50,
+                                                                right: 50,
                                                                 id: "btnAddEmployee",
                                                                 value: "Добавить сотрудника",
 
                                                                 on: {
                                                                     onItemClick: function () {
-                                                                     ///   AddEmployee(selectAssessment[0].employeeAssessment.employeeAssessment, "semployeeTable", employeeArr)
-                                                                        console.log("Employee = ",Employee)
-                                                                        console.log("chose employee  = ",choseEmployee)
+                                                                        ///   AddEmployee(selectAssessment[0].employeeAssessment.employeeAssessment, "semployeeTable", employeeArr)
+                                                                        console.log("Employee = ", Employee)
+                                                                        console.log("chose employee  = ", choseEmployee)
                                                                         console.log("employee arr = ", employeeArr)
-                                                                        console.log("selectAssessment[0].employeeAssessment.employeeAssessment = ",selectAssessment[0].employeeAssessment.employeeAssessment)
+                                                                        console.log("selectAssessment[0].employeeAssessment.employeeAssessment = ", selectAssessment[0].employeeAssessment.employeeAssessment)
                                                                     }
                                                                 }
                                                             },
@@ -402,11 +422,11 @@ webix.ready(function (message) {
                                                                     view: "button",
                                                                     hidden: true,
                                                                     width: 200,
-                                                                    position:"absolute",
+                                                                    position: "absolute",
                                                                     value: "Убрать сотрудника",
                                                                     on: {
                                                                         onItemClick: function () {
-                                                                              returnEmployee(selectAssessment[0].employeeAssessment.employeeAssessment,Employee)
+                                                                            returnEmployee(selectAssessment[0].employeeAssessment.employeeAssessment, Employee)
                                                                             //  delRowFromTable(selectAssessment[0].employeeAssessment.employeeAssessment, "semployeeTable", "")
 
 
@@ -418,14 +438,18 @@ webix.ready(function (message) {
                                                                     }
 
                                                                     ///
-                                                                },{ id: "btnEndAssessmentS",
+                                                                }, {
+                                                                    id: "btnEndAssessment",
                                                                     view: "button",
                                                                     hidden: true,
                                                                     width: 200,
-                                                                    position:"absolute",
-                                                                    value: "Завершить Собеседование"}]}
+                                                                    position: "absolute",
+                                                                    value: "Завершить Собеседование"
+                                                                }]
+                                                        }
 
-                                                    ]}
+                                                    ]
+                                                }
 
                                             ]
                                         },

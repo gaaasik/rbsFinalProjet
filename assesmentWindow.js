@@ -250,8 +250,10 @@ function AddAssessment(employeeArr) {
                                             value: "Убрать человека",
                                             on: {
                                                 onItemClick: function () {
-                                                    //  let candidateId = $$("dataCols").getItem($$("dataCols").getSelectedId()).id
-                                                    delRowFromTable(DataAssessment, "dataCols")
+                                                   //    delRowFromTable(DataAssessment, "dataCols")
+                                                    let candidate = new Candidate(DataAssessment)
+                                                    candidate.DeleteCandidate("dataCols")
+
 
                                                 }
                                             },
@@ -261,8 +263,10 @@ function AddAssessment(employeeArr) {
                                             css:"btnAdd",
                                             value: "Добавить человека",
                                             on: {onItemClick:function ()
-                                                {
-                                                    AddCandidate("dataCols",DataAssessment);
+                                                { let candidate = new Candidate(DataAssessment)
+                                                    candidate.AddCandidate("dataCols")
+
+                                                        //AddCandidate("dataCols",DataAssessment);
                                                 }
 
                                                 } ,
