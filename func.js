@@ -3,12 +3,22 @@ function deleteFromTabel(data, tabelId) {
     let isInTabel = findInd(data, Id)
     data.splice(isInTabel, 1)
     refreshTable("dataAssessmentSelect", data)
-
 }
-
 function changeState(state) {
-    console.log("start func")
     if (confirm("Вы уверены что хотите поменять статус?")) {
+        if (state === "Завершено") {
+            $$("currentStateSelect").define("on", "")
+            checkState(state);
+
+        }
+        if (state === "В процессе") {
+            state = "Завершено"
+            $$("currentStateSelect").define("value", state)
+            $$("currentStateSelect").refresh();
+
+            checkState(state);
+
+        }
         if (state === "Создано") {
 
             state = "В процессе"
@@ -17,39 +27,19 @@ function changeState(state) {
             // $$("currentState").refresh();
             checkState(state);
 
-        } else {
-            if (state === "Завершено") {
-                $$("currentStateSelect").define("on", "")
-                return
-            } else {
-                if (state === "В процессе") {
-                    state = "Завершено"
-                    $$("currentStateSelect").define("value", state)
-                    $$("currentStateSelect").refresh();
-
-                    checkState(state);
-
-                }
-            }
-
         }
-
-
     }
-    console.log("check")
     selectAssessment[0].currentStateSelect = state;
     Assessment[selectAssessment[0].isInAssess].currentState = state
     $$("asesTable").refresh();
 }
-
 function checkState(chState) {
-
     if ((chState === "В процессе") || (chState === "Завершено")) {
-       // $$("dataAssessmentSelect").define("editable", false)
-        $$("dataAssessmentSelect").config.columns[0].editor=""
-        $$("dataAssessmentSelect").config.columns[1].editor=""
-        $$("dataAssessmentSelect").config.columns[2].editor=""
-        $$("dataAssessmentSelect").config.columns[3].editor="text"
+        // $$("dataAssessmentSelect").define("editable", false)
+        $$("dataAssessmentSelect").config.columns[0].editor = ""
+        $$("dataAssessmentSelect").config.columns[1].editor = ""
+        $$("dataAssessmentSelect").config.columns[2].editor = ""
+        $$("dataAssessmentSelect").config.columns[3].editor = "text"
         $$("nameAssessmentSelect").disable()
         $$("nameAssessmentSelect").refresh();
 
@@ -68,9 +58,10 @@ function checkState(chState) {
         $$("btnDeleteEmployee").define("hidden", true)
         $$("btnDeleteEmployee").refresh()
         // $$("dataAssessmentSelect").getItem( $$("ResultAssessment").define("editor","text"))
-        //  $$("dataAssessmentSelect").refresh()
+        $$("dataAssessmentSelect").refresh()
 
     }
+
     if (chState === "Создано") {
         $$("dataAssessmentSelect").define("editable", true)
         $$("nameAssessmentSelect").enable()
@@ -80,8 +71,11 @@ function checkState(chState) {
         $$("btnAddCandidate").show()
         $$("btnAddCandidate").refresh()
     }
-    if (chState === "Завершено") {
-       // $$("btnEndAssessment").show()
-    }
 
+    if (chState === "Завершено") {
+        $$("dataAssessmentSelect").config.columns[3].editor = ""
+        $$("dataAssessmentSelect").refresh()
+    }
 }
+
+

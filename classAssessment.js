@@ -22,12 +22,9 @@ class Assesment {
     }
 
     set date(dateAssess) {
-        this.dataAssessment = dateAssess;
+        this.dateAssessment = dateAssess;
     }
 
-    log() {
-        console.log()
-    }
 
 
 }

@@ -5,8 +5,7 @@ function refreshTable(IdTable, table) {
 
 }
 
-function AddCandidate(idTable,DataAssessmen) {
-    console.log("DataAssaes = ",)
+function AddCandidate(idTable, DataAssessmen) {
     let validate = true
     for (let i = 0; i < DataAssessmen.length; i++) {
         if (DataAssessmen[i].nameMan === "" || DataAssessmen[i].secondNameMan === "" || DataAssessmen[i].patronymic === "") {
@@ -29,99 +28,23 @@ function AddCandidate(idTable,DataAssessmen) {
 
 }
 
-function delRowFromTable(table, textIdTable,employeeArrr) {
+function delRowFromTable(table, textIdTable, employeeArrr) {
 
     let Id = $$(textIdTable).getItem($$(textIdTable).getSelectedId()).id
     let isInTable = findInd(table, Id)
-    if (textIdTable ==="employeeTable"){
-    employeeArrr.push({
-        nameEmployee: table[isInTable].nameEmployee,
-        secondNameEmployee: table[isInTable].secondNameEmployee,
-        experienceEmployee: table[isInTable].experienceEmployee,
-        positionEmployee: table[isInTable].positionEmployee
-    })}
+    if (textIdTable === "employeeTable") {
+        employeeArrr.push({
+            nameEmployee: table[isInTable].nameEmployee,
+            secondNameEmployee: table[isInTable].secondNameEmployee,
+            experienceEmployee: table[isInTable].experienceEmployee,
+            positionEmployee: table[isInTable].positionEmployee
+        })
+    }
     table.splice(isInTable, 1)
     refreshTable(textIdTable, table)
 
 }
 
-function AddEmployee(choseEmploye,idTabel,employeeArr) {
-    var addEmpl = webix.ready(function () {
-        webix.ui(
-            {
-            id: "addEmpl",
-            view: "window",
-            head: false,
-            modal: true,
-            left: 200,
-            top: 50,
-            css: "main",
-            body: {
-                rows: [{
-                    view: "button", value: "Закрыть окно",css:"btnDelete",
-                    on: {
-                        onItemClick: function () {
-                            $$("addEmpl").close()
-                        }
-                    }
-                },
-                    {
-                        id: "choseEmployeeTable",
-                        view: "datatable",
-                        select: "row",
-                        navigation: true,
-                        autoheight: true,
-                        autowidth: true,
-                        data: Employee,
-                        autoConfig: true,
-
-                        columns: [{id: "nameEmployee", header: "Имя"},
-                            {id: "secondNameEmployee", header: "Фамилия"},
-                            {id: "experienceEmployee", header: "Опыт работы(лет)"},
-                            {id: "positionEmployee", header: "Должность", width: 300}
-
-                        ],
-
-                        on: {
-                            onItemClick: function () {
-                                let employeeId = $$("choseEmployeeTable").getItem($$("choseEmployeeTable").getSelectedId()).id
-                                let isInEmployee = findI(Employee,employeeId)
-                                let isInChoseEmploeyy = findI(choseEmploye,employeeId)
-                                if (isInChoseEmploeyy>-1){
-                                    alert("Этот сотрудник уже в списке")
-                                }
-                                else{
-
-
-                                choseEmployee.push({
-                                    nameEmployee: Employee[isInEmployee].nameEmployee,
-                                    secondNameEmployee: Employee[isInEmployee].secondNameEmployee,
-                                    experienceEmployee: Employee[isInEmployee].experienceEmployee,
-                                    positionEmployee: Employee[isInEmployee].positionEmployee
-
-                                })
-                                   employeeArr.splice(isInEmployee,1)
-                                    //  refreshTable("employeeTable", choseEmployee)
-                                    console.log("choseEmploye = ",choseEmploye)
-                                    refreshTable(idTabel, choseEmploye)
-
-                                $$("addEmpl").close()
-
-                            }}
-
-
-                        }
-
-
-                    }]
-                //работники
-
-            }
-        }).show()
-
-    })
-
-}
 
 function closeWindow() {
     DataAssessment = [{}]
@@ -133,8 +56,8 @@ function AddInMainPage() {
     let validate = true;
     let candidate = new Candidate(DataAssessment)
     let assessment = new Assesment($$("nameAssessment").getValue(), $$("dateAses").getValue())
+    console.log("дата = ", assessment.date)
     let employee = new EmployeeClass(choseEmployee)
-    console.log("employee = ",employee)
     for (let i = 0; i < DataAssessment.length; i++) {
         if (DataAssessment[i].nameMan === "" || DataAssessment[i].secondNameMan === "" || DataAssessment[i].patronymic === "") {
             alert("Заполните все поля кандидатов!");
@@ -156,7 +79,8 @@ function AddInMainPage() {
                 dateAssessment: assessment.date,
                 dataAssessment: candidate,
                 currentState: "Создано",
-                employeeAssessment: employee,
+                employeeAssessment: EmployeeAssessment,
+
             }
         )
         closeWindow()
@@ -164,17 +88,20 @@ function AddInMainPage() {
     }
 }
 
-function AddAssessment(employeeArr) {
+function AddAssessment(Assessment, employeee)
+{
     var popup = webix.ready(function () {
         webix.ui({
             view: "window", height: 100,
-            head:{view:"template",
-                template:"Введите данные о мероприятии",
-                css:"windowTemplate"},
-            //close: true,
+            head: {
+                view: "template",
+                template: "Введите данные о мероприятии",
+                css: "windowTemplate"
+            },
+
             modal: true,
             id: "pop1",
-            css:"main",
+            css: "main",
             fullscreen: true,
             body: {
                 id: "mylayout",
@@ -188,19 +115,19 @@ function AddAssessment(employeeArr) {
                             timepicker: true,
                             width: 300,
                             left: 10,
-                            stringResult:true
-                           // format:webix.Date.dateToStr("%d/%m/%y")
-                        }, {view: "button", value: "Закрыть окно", click: "closeWindow()",css:"btnDeleteWindow"}
+                            format:webix.Date.dateToStr("%d.%m. %Y"),
+                            stringResult: true
+                        }, {view: "button", value: "Закрыть окно", click: "closeWindow()", css: "btnDeleteWindow"}
                     ]
                 }
                     , {
                         rows: [{
                             cols: [{
-                                css:"nameAses",
+                                css: "nameAses",
                                 view: "template", width: 500,
                                 type: "header", template: "Кандидаты"
                             }, {
-                                css:"nameAses",width: 608,
+                                css: "nameAses", width: 608,
                                 view: "template",
                                 type: "header", template: "Сотрудники"
                             }]
@@ -214,20 +141,16 @@ function AddAssessment(employeeArr) {
                                     id: "dataCols",
                                     view: "datatable",
                                     editable: true,
-                                    css:"dataTable",
-                                    //select: "row",
+                                    css: "dataTable",
                                     editaction: "click",
                                     navigation: true,
                                     select: "cell",
                                     autoheight: true,
                                     autowidth: true,
                                     data: DataAssessment,
-                                    // onDbClick:{select:"row"},
                                     autoConfig: true,
                                     on: {
                                         onItemClick: function () {
-                                            // let candidateId = $$("dataCols").getItem($$("dataCols").getSelectedId()).id
-                                            // let isInCandidate = findInd(candidateId, DataAssessment)
                                             $$("delCand").define("hidden", false)
                                             let candidateId = $$("dataCols").getItem($$("dataCols").getSelectedId()).id
                                             let isInCandidate = findInd(candidateId, DataAssessment)
@@ -245,12 +168,11 @@ function AddAssessment(employeeArr) {
                                         {
                                             view: "button",
                                             id: "delCand",
-                                            css:"btnDelete",
+                                            css: "btnDelete",
 
                                             value: "Убрать человека",
                                             on: {
                                                 onItemClick: function () {
-                                                   //    delRowFromTable(DataAssessment, "dataCols")
                                                     let candidate = new Candidate(DataAssessment)
                                                     candidate.DeleteCandidate("dataCols")
 
@@ -258,18 +180,18 @@ function AddAssessment(employeeArr) {
                                                 }
                                             },
                                             width: 200
-                                        },{
+                                        }, {
                                             view: "button",
-                                            css:"btnAdd",
+                                            css: "btnAdd",
                                             value: "Добавить человека",
-                                            on: {onItemClick:function ()
-                                                { let candidate = new Candidate(DataAssessment)
+                                            on: {
+                                                onItemClick: function () {
+                                                    let candidate = new Candidate(DataAssessment)
                                                     candidate.AddCandidate("dataCols")
 
-                                                        //AddCandidate("dataCols",DataAssessment);
                                                 }
 
-                                                } ,
+                                            },
                                             width: 200
                                         }
 
@@ -286,7 +208,7 @@ function AddAssessment(employeeArr) {
                                     navigation: true,
                                     autoheight: true,
                                     autowidth: true,
-                                    data: choseEmployee,
+                                    data: EmployeeAssessment,
                                     autoConfig: true,
                                     columns: [{id: "nameEmployee", header: "Имя"},
                                         {id: "secondNameEmployee", header: "Фамилия"},
@@ -298,24 +220,24 @@ function AddAssessment(employeeArr) {
                                 }, {
                                     cols: [{
                                         view: "button", value: "убрать сотрудника",
-                                        css:"btnDelete",
+                                        css: "btnDelete",
                                         on: {
                                             onItemClick: function () {
-
-                                                delRowFromTable(choseEmployee, "employeeTable",employeeArr)
+                                                let employee = new EmployeeClass(employeee.employeeAssessment)
+                                                employee.deleteEmployee(EmployeeAssessment, "employeeTable")
 
                                             }
                                         },
                                     }, {
                                         view: "button", value: "Добавить сотрудника", width: 300,
-                                        css:"btnAdd",
+                                        css: "btnAdd",
                                         on: {
                                             onItemClick: function () {
+                                                let employee = new EmployeeClass(employeee.employeeAssessment)
+                                                employee.AddEmployee(EmployeeAssessment, "employeeTable",employeee.employeeAssessment)
 
-
-                                                AddEmployee(choseEmployee, "employeeTable",employeeArr)
-
-                                            }}
+                                            }
+                                        }
                                     }]
                                 }]
 
@@ -328,9 +250,13 @@ function AddAssessment(employeeArr) {
                             view: "button",
                             css: "btnAdd",
                             value: "Добавить мероприятие",
-                            on:{onItemClick: function () { AddInMainPage()
+                            on: {
+                                onItemClick: function () {
+                                    AddInMainPage()
+                                    employeeArr = Employee;
 
-                                }},
+                                }
+                            },
                             width: 300,
                             height: 100
                         },

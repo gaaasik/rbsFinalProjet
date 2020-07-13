@@ -39,11 +39,22 @@ class Candidate {
                 {
                     nameMan: "",
                     secondNameMan: "",
+                    patronymic:"",
                     resultAssessment: ""
                 })
             refreshTable(idTable, this.dataAssessment);
         }
     }
+
+    // deleteCandidateFromWindow() {
+    //     refreshTable("dataCols", DataAssessment);
+    //     let candidateId = $$("dataCols").getItem($$("dataCols").getSelectedId().id)
+    //     let isInCandidate = findInd(candidateId, DataAssessment)
+    //     console.log("candidate id = ", candidateId)
+    //     DataAssessment.splice(isInCandidate, 1)
+    //     refreshTable("dataCols", DataAssessment);
+    // }
+
 
 
 }

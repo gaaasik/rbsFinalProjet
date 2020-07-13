@@ -1,14 +1,13 @@
 function editEmployeeInMain() {
-    console.log("chose Employee = ", Employee)
     webix.ui({
             view: "window",
 
             modal: true,
-            id:"modalWindowEmployee",
+            id: "modalWindowEmployee",
             width: 700,
             height: 500,
             position: "center",
-            head:"Работники",
+            head: "Работники",
             body: {
                 rows: [{
                     id: "editEmployeeTable",
@@ -29,43 +28,49 @@ function editEmployeeInMain() {
                         {id: "positionEmployee", header: "Должность", editor: "text", width: 300}
 
                     ],
-                    on:{onitemclick: function () {
-                        $$("deleteEmployee").show()
-                        }}
+                    on: {
+                        onitemclick: function () {
+                            $$("deleteEmployee").show()
+                        }
+                    }
 
                 }, {
-                    cols: [{view: "button",css:"btnDelete", hidden:true, id: "deleteEmployee",value: "убрать сотрудника", click:"deleteEmployee()"}, {
-                        view: "button", css:"btnAdd", value: "Внести сотрудника в таблицу", click: "addEmployeeInTable()",
+                    cols: [{
+                        view: "button",
+                        css: "btnDelete",
+                        hidden: true,
+                        id: "deleteEmployee",
+                        value: "убрать сотрудника",
+                        on: {
+                            onitemclick: function () {
+                                let employee = new EmployeeClass(Employee)
+                                employee.deleteEmployeeFromTable()
+
+                            }
+                        }
+                    }, {
+                        view: "button", css: "btnAdd", value: "Внести сотрудника в таблицу",
+                        click: "addEmployeeInTable()" //view
 
                     }]
 
-                },{
-                    view: "button", css:"btnSave", value: "Сохранить изменения и выйти", click: "pushAllChangeEmployee()"}]}
+                }, {
+                    view: "button", css: "btnSave", value: "Выйти", click: "    $$(\"modalWindowEmployee\").close();"
+                }]
+            }
 
         }
     ).show()
 
-}
+} //view
 
-function pushAllChangeEmployee() {
-    $$("modalWindowEmployee").close();
-   // refreshTable("editEmployeeTable",Employee)
-}
-
-function deleteEmployee() {
-    let employeeId = $$("editEmployeeTable").getItem($$("editEmployeeTable").getSelectedId()).id
-    let isInEmployee = findInd(Employee,employeeId)
-    if ((confirm("Вы уверены что хотите удалить этого сотрудника??"))){
-        Employee.splice(isInEmployee, 1)
-        refreshTable("editEmployeeTable", Employee);
-    }}
-
-function addEmployeeInTable() {
-     webix.ui({
-         head:"Заполните данные о сотруднике",
+function addEmployeeInTable() //view
+{
+    webix.ui({
+        head: "Заполните данные о сотруднике",
         view: "window",
-        close: true,
-        id:"editEmployee",
+        modal: true,
+        id: "editEmployee",
         width: 400,
         height: 400,
         position: "center",
@@ -79,7 +84,17 @@ function addEmployeeInTable() {
                     view: "text", id: "experienceNewEmployee", placeholder: "Опыт", width: 200
                 }, {
                     view: "text", id: "positionNewEmployee", placeholder: "Должность", width: 200
-                },{view: "button", id:"addEmployee", value: "Добавить",click:"pushEmployee()"}
+                }, {
+                    view: "button", id: "addEmployee", value: "Добавить", on: {
+                        onitemclick: function () {
+                            let employee = new EmployeeClass(Employee)
+                            employee.AddNewEmployee()
+                        }
+                    }
+                },
+                {
+                    view: "button", css: "btnSave", value: "Закрыть", click: "$$(\"editEmployee\").close();"
+                }
 
             ]
         }
@@ -88,49 +103,3 @@ function addEmployeeInTable() {
     }).show()
 }
 
-function pushEmployee() {
-
-    if(($$("nameNewEmployee").getValue()==="")||($$("secondNameNewEmployee").getValue()==="")||($$("experienceNewEmployee").getValue()==="")||($$("positionNewEmployee").getValue()===""))
-    { alert("Заполнены не все поля")}
-    else {
-        Employee.push(
-            {
-                nameEmployee: $$("nameNewEmployee").getValue(),
-                secondNameEmployee :$$("secondNameNewEmployee").getValue(),
-                experienceEmployee: $$("experienceNewEmployee").getValue(),
-                positionEmployee: $$("positionNewEmployee").getValue()
-
-
-
-            }
-        )
-        refreshTable("editEmployeeTable",Employee)
-        $$("editEmployee").close()
-       // add.close();
-    }
-
-}
-
-function returnEmployee(data,dataMain) {
-    console.log("data = ",dataMain)
-    console.log("nameEmployee = ", data.nameEmployee)
-    dataMain.push({
-        nameEmployee: data.nameEmployee,
-        secondNameEmployee : data.secondNameEmployee,
-        experienceEmployee: data.experienceEmployee,
-        positionEmployee: data.positionEmployee
-
-    })
-
-}
-
-function deleteCandidateFromWindow() {
-    refreshTable("dataCols", DataAssessment);
-    let candidateId = $$("dataCols").getItem($$("dataCols").getSelectedId().id)
-    let isInCandidate = findInd(candidateId, DataAssessment)
-    console.log("candidate id = ", candidateId)
-    DataAssessment.splice(isInCandidate, 1)
-    refreshTable("dataCols", DataAssessment);
-
-
-}

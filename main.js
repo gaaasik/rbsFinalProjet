@@ -1,3 +1,4 @@
+
 function findI(table, it) //поиск индекса строки на которую кликнули
 {
     let is;
@@ -9,7 +10,6 @@ function findI(table, it) //поиск индекса строки на кото
         }
     }
     if (is) {
-        console.log("iter = ", iter)
         return iter
     } else {
         return -1;
@@ -50,10 +50,6 @@ function clickRow(id) {
     delButn.show();
     let k = 1;
     $$("smallAdd").show();
-    // $$("smallAdd").define("data", Assessment[id])
-    // $$("selectAssessment").define("data", selectAssessment[0].dataAssessmentSelect)
-    // $$("selectAssessment").refresh()
-
 
 }
 
@@ -67,17 +63,22 @@ function deleteActivity(id, isIn, idTable, data) {
 
 function refreshEditor(assesLength, data, employees, mainData) {
 
-    // mainData.currentState = selectAssessment[0].currentState
-    //название
+
     $$("nameAssessmentSelect").define("value", selectAssessment[0].nameAssessmentSelect)
     $$("nameAssessmentSelect").refresh();
 
     //дата
     let date = selectAssessment[0].dateAssessmentSelect
-
-    $$("dateAssessmentSelect").define("value", date);
+    var d = webix.Date.datePart(new Date(date));
+    $$('dateAssessmentSelect').setValue(d);
     $$("dateAssessmentSelect").refresh();
 
+    $$("dateAssessmentSelect").attachEvent("onChange", function(){
+      mainData.dateAssessment = $$("dateAssessmentSelect").getValue()
+        $$('dateAssessmentSelect').setValue($$("dateAssessmentSelect").getValue());
+        $$("dateAssessmentSelect").refresh();
+
+    });
     $$("currentStateSelect").define("value", selectAssessment[0].currentStateSelect);
     $$("currentStateSelect").refresh();
 
@@ -89,6 +90,8 @@ function refreshEditor(assesLength, data, employees, mainData) {
     $$("semployeeTable").define("data", employees);
     $$("semployeeTable").refresh();
 }
+
+
 
 webix.ready(function (message) {
 
@@ -142,9 +145,9 @@ webix.ready(function (message) {
                         on: {
                             onitemclick: function () {
 
-                                employeeArr = Employee;
-                                choseEmployee = [];
-                                AddAssessment(employeeArr);
+                                let employee = new EmployeeClass(Employee)
+                                 EmployeeAssessment = []
+                                AddAssessment(Assessment,employee);
 
                             }
                         }
@@ -194,24 +197,21 @@ webix.ready(function (message) {
                                         let selectedId = $$("asesTable").getItem($$("asesTable").getSelectedId()).id;
                                         let isInAses = findInd(Assessment, selectedId)
                                         selectAssessment = [];
-                                        console.log("Assessment[isInAses].employeeAssessment = ", Assessment[isInAses].employeeAssessment.employeeAssessment)
-                                        let candidate = new Candidate(Assessment[isInAses].dataAssessment.dataAssessment)
-                                        candidate.logDataCandidate()
+                                          let candidate = new Candidate(Assessment[isInAses].dataAssessment.dataAssessment)
                                         selectAssessment.push({
                                             nameAssessmentSelect: Assessment[isInAses].nameAssessment,
                                             dateAssessmentSelect: Assessment[isInAses].dateAssessment,
                                             dataAssessmentSelect: Assessment[isInAses].dataAssessment,
                                             currentStateSelect: Assessment[isInAses].currentState,
                                             employeeAssessment: Assessment[isInAses].employeeAssessment,
-                                            isInAssess: isInAses
+                                            isInAssess: isInAses,
+
                                         })
 
-                                        let data = Assessment[isInAses].dataAssessment
-                                        checkState(Assessment[isInAses].currentState)
-                                        console.log("state = ", candidate)
-                                        refreshEditor(isInAses, candidate.dataAssessment, Assessment[isInAses].employeeAssessment.employeeAssessment, Assessment[isInAses])
-                                        clickRow(isInAses)
-                                        return (isInAses, candidate)
+                                         checkState(Assessment[isInAses].currentState)
+                                         refreshEditor(isInAses, candidate.dataAssessment, Assessment[isInAses].employeeAssessment, Assessment[isInAses])
+                                         clickRow(isInAses)     //отрисовка едитора
+                                         return (isInAses, candidate)
 
 
                                     }
@@ -238,11 +238,15 @@ webix.ready(function (message) {
                                             {
                                                 id: "dateAssessmentSelect",
                                                 view: "datepicker",
-                                                label: "Дата",
-                                                //value:1,
+                                                value:"date",
                                                 timepicker: true,
                                                 width: 300,
+                                                format:webix.Date.dateToStr("%d.%m. %Y"),
                                                 left: 10,
+                                                onChange:{onitemclick:function () {
+                                                    selectAssessment[0].dateAssessmentSelect = $$("dateAssessmentSelect").getValue()
+
+                                                           }}
 
                                             }, {
                                                 view: "button",
@@ -293,7 +297,6 @@ webix.ready(function (message) {
 
                                                             on: {
                                                                 onItemClick: function () {
-                                                                    console.log("currentStateSelect", selectAssessment[0].currentStateSelect)
                                                                     if (selectAssessment[0].currentStateSelect === "Создано")
                                                                         $$("btnDeleteCandidate").show();
 
@@ -409,11 +412,9 @@ webix.ready(function (message) {
 
                                                                 on: {
                                                                     onItemClick: function () {
-                                                                        ///   AddEmployee(selectAssessment[0].employeeAssessment.employeeAssessment, "semployeeTable", employeeArr)
-                                                                        console.log("Employee = ", Employee)
-                                                                        console.log("chose employee  = ", choseEmployee)
-                                                                        console.log("employee arr = ", employeeArr)
-                                                                        console.log("selectAssessment[0].employeeAssessment.employeeAssessment = ", selectAssessment[0].employeeAssessment.employeeAssessment)
+
+                                                                        let employee = new EmployeeClass(selectAssessment[0].employeeAssessment.employeeAssessment)
+                                                                        employee.AddEmployee(selectAssessment[0].employeeAssessment,"semployeeTable",Employee)
                                                                     }
                                                                 }
                                                             },
@@ -426,11 +427,10 @@ webix.ready(function (message) {
                                                                     value: "Убрать сотрудника",
                                                                     on: {
                                                                         onItemClick: function () {
-                                                                            returnEmployee(selectAssessment[0].employeeAssessment.employeeAssessment, Employee)
-                                                                            //  delRowFromTable(selectAssessment[0].employeeAssessment.employeeAssessment, "semployeeTable", "")
-
-
-                                                                            if ((selectAssessment[0].employeeAssessment.employeeAssessment.length === 0)) {
+                                                                            let employee = new EmployeeClass(Employee)
+                                                                            employee.deleteEmployee(selectAssessment[0].employeeAssessment,"semployeeTable")
+                                                                           // console.log("Employee = ",Employee,"selectAssessment[0].employeeAssessment = ",selectAssessment[0].employeeAssessment,"EmployeeAssessment",EmployeeAssessment,"Emplouee = ",employee)
+                                                                            if ((selectAssessment[0].employeeAssessment.length === 0)) {
                                                                                 $$("btnDeleteEmployee").define("hidden", true)
                                                                                 $$("btnDeleteEmployee").refresh()
                                                                             }
@@ -463,3 +463,4 @@ webix.ready(function (message) {
         }
     )
 })
+
