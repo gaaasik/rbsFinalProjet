@@ -74,9 +74,13 @@ function refreshEditor(assesLength, data, employees, mainData) {
     $$("dateAssessmentSelect").refresh();
 
     $$("dateAssessmentSelect").attachEvent("onChange", function(){
-      mainData.dateAssessment = $$("dateAssessmentSelect").getValue()
-        $$('dateAssessmentSelect').setValue($$("dateAssessmentSelect").getValue());
-        $$("dateAssessmentSelect").refresh();
+       // if (selectAssessment[0]===mainData){
+            mainData.dateAssessment = $$("dateAssessmentSelect").getValue()
+
+            $$('dateAssessmentSelect').setValue($$("dateAssessmentSelect").getValue());
+            $$("dateAssessmentSelect").refresh();
+     //   }
+
 
     });
     $$("currentStateSelect").define("value", selectAssessment[0].currentStateSelect);
